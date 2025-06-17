@@ -89,10 +89,10 @@ const TripForm = () => {
         
         toast({
           title: "Roteiro gerado com sucesso!",
-          description: "Redirecionando para o resumo da viagem.",
+          description: "Redirecionando para o resultado.",
         });
         
-        navigate('/summary');
+        navigate('/result');
       } else {
         throw new Error(`Erro na requisição: ${response.status}`);
       }
