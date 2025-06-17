@@ -27,11 +27,17 @@ const ResultPage = () => {
     }
 
     try {
-      const responseData = JSON.parse(storedResponse);
-      // Assumindo que a resposta do webhook contém o texto markdown
-      // Pode ser que venha em uma propriedade específica, ajuste conforme necessário
-      const markdownText = responseData.text || responseData.markdown || responseData.content || JSON.stringify(responseData, null, 2);
-      setWebhookResponse(markdownText);
+      // Se a resposta for um JSON, extrair o texto; caso contrário, usar a resposta diretamente
+      let responseText = storedResponse;
+      try {
+        const parsedResponse = JSON.parse(storedResponse);
+        responseText = typeof parsedResponse === 'string' ? parsedResponse : JSON.stringify(parsedResponse, null, 2);
+      } catch {
+        // Se não for JSON válido, usar a string diretamente
+        responseText = storedResponse;
+      }
+      
+      setWebhookResponse(responseText);
     } catch (error) {
       console.error('Erro ao processar resposta do webhook:', error);
       setWebhookResponse('Erro ao processar a resposta do webhook.');
@@ -76,12 +82,11 @@ const ResultPage = () => {
             </p>
             
             <div className="space-y-4">
-              <Textarea
-                value={webhookResponse}
-                readOnly
-                className="min-h-[500px] font-mono text-sm"
-                placeholder="Resposta do webhook aparecerá aqui..."
-              />
+              <div className="bg-white border rounded-lg p-6">
+                <pre className="whitespace-pre-wrap text-sm leading-relaxed font-sans">
+                  {webhookResponse}
+                </pre>
+              </div>
               
               <div className="flex justify-between">
                 <Button

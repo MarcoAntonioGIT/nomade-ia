@@ -80,12 +80,13 @@ const TripForm = () => {
       });
 
       if (response.ok) {
-        const responseData = await response.json();
-        console.log("Resposta do webhook:", responseData);
+        // Tratar a resposta como texto simples
+        const responseText = await response.text();
+        console.log("Resposta do webhook:", responseText);
         
         // Salvar os dados no localStorage para uso nas próximas páginas
         localStorage.setItem('tripFormData', JSON.stringify(formData));
-        localStorage.setItem('webhookResponse', JSON.stringify(responseData));
+        localStorage.setItem('webhookResponse', responseText);
         
         toast({
           title: "Roteiro gerado com sucesso!",
