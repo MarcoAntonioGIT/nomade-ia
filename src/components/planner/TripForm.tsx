@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -30,6 +29,7 @@ const TripForm = () => {
     dietaryRestrictions: [],
   });
   
+  const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -55,7 +55,7 @@ const TripForm = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!formData.origin || !formData.destination) {
@@ -67,9 +67,56 @@ const TripForm = () => {
       return;
     }
 
-    localStorage.setItem('tripFormData', JSON.stringify(formData));
-    navigate('/summary');
+    setIsGenerating(true);
+    console.log("Enviando dados do formulário para webhook:", formData);
+
+    try {
+      const response = await fetch('https://n8n.tomatize.com/webhook-test/smarttravelai', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log("Resposta do webhook:", responseData);
+        
+        // Salvar os dados no localStorage para uso nas próximas páginas
+        localStorage.setItem('tripFormData', JSON.stringify(formData));
+        localStorage.setItem('webhookResponse', JSON.stringify(responseData));
+        
+        toast({
+          title: "Roteiro gerado com sucesso!",
+          description: "Redirecionando para o resumo da viagem.",
+        });
+        
+        navigate('/summary');
+      } else {
+        throw new Error(`Erro na requisição: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Erro ao enviar dados para webhook:", error);
+      toast({
+        title: "Erro ao gerar roteiro",
+        description: "Ocorreu um erro ao processar sua solicitação. Tente novamente.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsGenerating(false);
+    }
   };
+
+  if (isGenerating) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-travel-orange"></div>
+        <h2 className="text-2xl font-semibold text-center">Gerando Roteiro</h2>
+        <p className="text-muted-foreground text-center">Nossa IA está criando o roteiro perfeito para você...</p>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -180,8 +227,12 @@ const TripForm = () => {
         </div>
       </div>
 
-      <Button type="submit" className="w-full md:w-auto bg-travel-orange hover:bg-travel-orange/90 text-white">
-        Continuar para o resumo
+      <Button 
+        type="submit" 
+        className="w-full md:w-auto bg-travel-orange hover:bg-travel-orange/90 text-white"
+        disabled={isGenerating}
+      >
+        {isGenerating ? 'Processando...' : 'Planejar Viagem'}
       </Button>
     </form>
   );
