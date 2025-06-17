@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import MarkdownRenderer from '@/components/MarkdownRenderer';
 
 const ResultPage = () => {
   const [webhookResponse, setWebhookResponse] = useState<string>('');
@@ -30,7 +30,7 @@ const ResultPage = () => {
       const responseData = JSON.parse(storedResponse);
       // Assumindo que a resposta do webhook contém o texto markdown
       // Pode ser que venha em uma propriedade específica, ajuste conforme necessário
-      const markdownText = responseData.text || responseData.markdown || responseData.content || JSON.stringify(responseData, null, 2);
+      const markdownText = responseData.output || responseData.text || responseData.markdown || responseData.content || JSON.stringify(responseData, null, 2);
       setWebhookResponse(markdownText);
     } catch (error) {
       console.error('Erro ao processar resposta do webhook:', error);
@@ -75,13 +75,10 @@ const ResultPage = () => {
               Aqui está o roteiro personalizado criado pela nossa IA:
             </p>
             
-            <div className="space-y-4">
-              <Textarea
-                value={webhookResponse}
-                readOnly
-                className="min-h-[500px] font-mono text-sm"
-                placeholder="Resposta do webhook aparecerá aqui..."
-              />
+            <div className="space-y-6">
+              <div className="bg-white rounded-lg shadow-sm border p-8">
+                <MarkdownRenderer content={webhookResponse} />
+              </div>
               
               <div className="flex justify-between">
                 <Button
