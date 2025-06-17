@@ -71,7 +71,7 @@ const TripForm = () => {
     console.log("Enviando dados do formulário para webhook:", formData);
 
     try {
-      const response = await fetch('https://n8n.tomatize.com/webhook-test/smarttravelai', {
+      const response = await fetch('https://n8n.tomatize.com/webhook/smarttravelai', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
