@@ -21,8 +21,8 @@ const Navbar = () => {
           <Link to="/" className="text-muted-foreground hover:text-foreground transition-colors">
             Início
           </Link>
-          <Link to="/planner" className="text-muted-foreground hover:text-foreground transition-colors">
-            Planejar
+          <Link to="/my-trips" className="text-muted-foreground hover:text-foreground transition-colors">
+            Minhas Viagens
           </Link>
           <Link to="/offers" className="text-muted-foreground hover:text-foreground transition-colors">
             Ofertas

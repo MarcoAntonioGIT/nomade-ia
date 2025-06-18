@@ -1,11 +1,34 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import TripPlannerSection from '@/components/home/TripPlannerSection';
+import TravelPackages from '@/components/packages/TravelPackages';
+import SignupDialog from '@/components/SignupDialog';
+import { TripFormData } from '@/components/home/TripPlannerSection';
 
 const Index = () => {
+  const [isSignupOpen, setIsSignupOpen] = useState(false);
+  const [generatedTrip, setGeneratedTrip] = useState<TripFormData | null>(null);
+  const [availablePackages, setAvailablePackages] = useState<any[]>([]);
+  const [showPackages, setShowPackages] = useState(false);
+
+  const handleTripGenerated = (tripData: TripFormData, packages: any[]) => {
+    setGeneratedTrip(tripData);
+    setAvailablePackages(packages);
+    setShowPackages(true);
+  };
+
+  const handleAuthRequired = () => {
+    setIsSignupOpen(true);
+  };
+
+  const handleSelectPackage = (packageId: string) => {
+    console.log('Pacote selecionado:', packageId);
+    // Implementar lógica de seleção de pacote
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -33,11 +56,9 @@ const Index = () => {
               <p className="text-lg md:text-xl mb-8">
                 Combinamos tecnologia avançada com conhecimento profundo de turismo para criar o roteiro perfeito para você.
               </p>
-              <Link to="/planner">
-                <Button size="lg" className="bg-nomade-orange hover:bg-nomade-orange/90 text-white font-semibold px-8 py-6 text-xl">
-                  Planeje sua viagem
-                </Button>
-              </Link>
+              <Button size="lg" className="bg-nomade-orange hover:bg-nomade-orange/90 text-white font-semibold px-8 py-6 text-xl">
+                <a href="#planner">Planeje sua viagem</a>
+              </Button>
             </div>
           </div>
         </section>
@@ -73,16 +94,24 @@ const Index = () => {
                 </p>
               </div>
             </div>
-            
-            <div className="text-center mt-12">
-              <Link to="/planner">
-                <Button className="bg-nomade-dark-blue hover:bg-nomade-dark-blue/90 text-white">
-                  Comece agora
-                </Button>
-              </Link>
-            </div>
           </div>
         </section>
+
+        {/* Trip Planner Section */}
+        <div id="planner">
+          <TripPlannerSection 
+            onTripGenerated={handleTripGenerated}
+            onAuthRequired={handleAuthRequired}
+          />
+        </div>
+
+        {/* Travel Packages Section - Only show after trip is generated */}
+        {showPackages && (
+          <TravelPackages 
+            packages={availablePackages}
+            onSelectPackage={handleSelectPackage}
+          />
+        )}
         
         {/* Destinations Section */}
         <section className="py-16">
@@ -181,16 +210,19 @@ const Index = () => {
             <p className="text-white/80 text-lg mb-8 max-w-2xl mx-auto">
               Deixe nossa inteligência artificial criar um roteiro personalizado que atenda às suas preferências e orçamento.
             </p>
-            <Link to="/planner">
-              <Button size="lg" className="bg-nomade-orange hover:bg-nomade-orange/90 text-white">
-                Planeje sua viagem agora
-              </Button>
-            </Link>
+            <Button size="lg" className="bg-nomade-orange hover:bg-nomade-orange/90 text-white">
+              <a href="#planner">Planeje sua viagem agora</a>
+            </Button>
           </div>
         </section>
       </main>
       
       <Footer />
+      
+      <SignupDialog 
+        isOpen={isSignupOpen} 
+        onClose={() => setIsSignupOpen(false)} 
+      />
     </div>
   );
 };

@@ -31,7 +31,7 @@ const SignupDialog = ({ isOpen, onClose }: SignupDialogProps) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const sendWebhook = async (userData: { name: string; email: string }) => {
+  const sendWebhook = async (userData: { name: string; email: string; password: string }) => {
     try {
       console.log('Enviando webhook para:', 'https://n8n.nomadeia.com.br/webhook-test/cadastro-usuario');
       console.log('Dados do usuário:', userData);
@@ -44,6 +44,7 @@ const SignupDialog = ({ isOpen, onClose }: SignupDialogProps) => {
         body: JSON.stringify({
           nome: userData.name,
           email: userData.email,
+          senha: userData.password,
           timestamp: new Date().toISOString(),
           origem: 'cadastro_site'
         }),
@@ -87,10 +88,11 @@ const SignupDialog = ({ isOpen, onClose }: SignupDialogProps) => {
       // Simulação de criação de conta
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      // Enviar webhook com as informações do usuário
+      // Enviar webhook com as informações do usuário incluindo senha
       await sendWebhook({
         name: formData.name,
-        email: formData.email
+        email: formData.email,
+        password: formData.password
       });
       
       toast({
