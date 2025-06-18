@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -184,7 +183,7 @@ const MyTripsPage = () => {
                       const relatedTrip = trips.find(t => t.id === pkg.tripId);
                       return (
                         <Card key={pkg.id}>
-                          <Car dContent className="p-6">
+                          <CardContent className="p-6">
                             <div className="flex items-center justify-between">
                               <div className="space-y-1">
                                 <h3 className="text-lg font-semibold">{pkg.title}</h3>
