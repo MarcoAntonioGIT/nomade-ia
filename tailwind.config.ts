@@ -67,14 +67,13 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Cores temáticas da agência de viagens
-				travel: {
-					'blue': '#1a73e8',
-					'light-blue': '#e8f0fe',
-					'green': '#34a853',
-					'light-green': '#e6f4ea',
-					'orange': '#fa7b17',
-					'light-orange': '#feefe3',
+				// Cores da Nomade IA
+				nomade: {
+					'turquoise': '#3DC9B3',
+					'dark-blue': '#1A1A2E',
+					'orange': '#FF8C42',
+					'light-turquoise': '#E8F8F5',
+					'light-orange': '#FFF4F0',
 				}
 			},
 			borderRadius: {

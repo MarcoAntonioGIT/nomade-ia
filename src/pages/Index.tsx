@@ -34,7 +34,7 @@ const Index = () => {
                 Combinamos tecnologia avançada com conhecimento profundo de turismo para criar o roteiro perfeito para você.
               </p>
               <Link to="/planner">
-                <Button size="lg" className="bg-travel-orange hover:bg-travel-orange/90 text-white font-semibold px-8 py-6 text-xl">
+                <Button size="lg" className="bg-nomade-orange hover:bg-nomade-orange/90 text-white font-semibold px-8 py-6 text-xl">
                   Planeje sua viagem
                 </Button>
               </Link>
@@ -50,7 +50,7 @@ const Index = () => {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="bg-white p-8 rounded-lg shadow-sm text-center">
-                <div className="bg-travel-light-blue text-travel-blue w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6">1</div>
+                <div className="bg-nomade-light-turquoise text-nomade-turquoise w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6">1</div>
                 <h3 className="text-xl font-semibold mb-4">Preencha suas preferências</h3>
                 <p className="text-muted-foreground">
                   Informe seu destino, datas, orçamento e preferências para que nossa IA entenda o que você busca.
@@ -58,7 +58,7 @@ const Index = () => {
               </div>
               
               <div className="bg-white p-8 rounded-lg shadow-sm text-center">
-                <div className="bg-travel-light-blue text-travel-blue w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6">2</div>
+                <div className="bg-nomade-light-turquoise text-nomade-turquoise w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6">2</div>
                 <h3 className="text-xl font-semibold mb-4">Receba seu roteiro personalizado</h3>
                 <p className="text-muted-foreground">
                   Nossa IA cria um roteiro detalhado com atrações, restaurantes e dicas locais adaptadas ao seu perfil.
@@ -66,7 +66,7 @@ const Index = () => {
               </div>
               
               <div className="bg-white p-8 rounded-lg shadow-sm text-center">
-                <div className="bg-travel-light-blue text-travel-blue w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6">3</div>
+                <div className="bg-nomade-light-turquoise text-nomade-turquoise w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6">3</div>
                 <h3 className="text-xl font-semibold mb-4">Viaje com tranquilidade</h3>
                 <p className="text-muted-foreground">
                   Reserve tudo em um só lugar e aproveite sua viagem com acesso ao seu itinerário pelo aplicativo.
@@ -76,7 +76,7 @@ const Index = () => {
             
             <div className="text-center mt-12">
               <Link to="/planner">
-                <Button className="bg-travel-blue hover:bg-travel-blue/90">
+                <Button className="bg-nomade-dark-blue hover:bg-nomade-dark-blue/90 text-white">
                   Comece agora
                 </Button>
               </Link>
@@ -146,18 +146,18 @@ const Index = () => {
                 },
                 {
                   name: 'Marina Costa',
-                  text: 'Economizei tempo e dinheiro usando o SmartTravel. O roteiro foi perfeito e incluiu lugares que eu jamais descobriria sozinha.',
+                  text: 'Economizei tempo e dinheiro usando a Nomade IA. O roteiro foi perfeito e incluiu lugares que eu jamais descobriria sozinha.',
                   location: 'Viagem para Lisboa',
                 },
                 {
                   name: 'Carlos Mendes',
-                  text: 'Como viajante de negócios, preciso de praticidade. O SmartTravel me surpreendeu com sua eficiência e personalização.',
+                  text: 'Como viajante de negócios, preciso de praticidade. A Nomade IA me surpreendeu com sua eficiência e personalização.',
                   location: 'Viagem para Nova York',
                 },
               ].map((testimonial, index) => (
                 <div key={index} className="bg-white p-8 rounded-lg shadow-sm">
                   <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 rounded-full bg-travel-light-blue flex items-center justify-center text-travel-blue font-bold text-xl">
+                    <div className="w-12 h-12 rounded-full bg-nomade-light-turquoise flex items-center justify-center text-nomade-turquoise font-bold text-xl">
                       {testimonial.name.charAt(0)}
                     </div>
                     <div className="ml-4">
@@ -173,7 +173,7 @@ const Index = () => {
         </section>
         
         {/* CTA Section */}
-        <section className="py-16 bg-travel-blue">
+        <section className="py-16 bg-nomade-dark-blue">
           <div className="container text-center">
             <h2 className="text-3xl font-bold font-heading text-white mb-6">
               Pronto para planejar sua próxima aventura?
@@ -182,7 +182,7 @@ const Index = () => {
               Deixe nossa inteligência artificial criar um roteiro personalizado que atenda às suas preferências e orçamento.
             </p>
             <Link to="/planner">
-              <Button size="lg" className="bg-travel-orange hover:bg-travel-orange/90 text-white">
+              <Button size="lg" className="bg-nomade-orange hover:bg-nomade-orange/90 text-white">
                 Planeje sua viagem agora
               </Button>
             </Link>

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -112,7 +113,7 @@ const TripForm = () => {
   if (isGenerating) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-travel-orange"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-nomade-orange"></div>
         <h2 className="text-2xl font-semibold text-center">Gerando Roteiro</h2>
         <p className="text-muted-foreground text-center">Nossa IA está criando o roteiro perfeito para você...</p>
       </div>
@@ -230,7 +231,7 @@ const TripForm = () => {
 
       <Button 
         type="submit" 
-        className="w-full md:w-auto bg-travel-orange hover:bg-travel-orange/90 text-white"
+        className="w-full md:w-auto bg-nomade-orange hover:bg-nomade-orange/90 text-white"
         disabled={isGenerating}
       >
         {isGenerating ? 'Processando...' : 'Planejar Viagem'}
