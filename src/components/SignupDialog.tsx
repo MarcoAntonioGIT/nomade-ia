@@ -32,7 +32,7 @@ const SignupDialog = ({ isOpen, onClose }: SignupDialogProps) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const sendWebhook = async (userData: { name: string; email: string }) => {
+  const sendWebhook = async (userData: { id?: string; name: string; email: string }) => {
     try {
       console.log('Enviando webhook para n8n:', userData);
       
@@ -42,6 +42,7 @@ const SignupDialog = ({ isOpen, onClose }: SignupDialogProps) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          id: userData.id,
           name: userData.name,
           email: userData.email,
           timestamp: new Date().toISOString(),
@@ -75,7 +76,11 @@ const SignupDialog = ({ isOpen, onClose }: SignupDialogProps) => {
 
     setIsSubmitting(true);
     
-    const { error } = await signUp(formData.email, formData.password);
+    const { data, error } = await signUp(
+      formData.email,
+      formData.password,
+      formData.name
+    );
     
     if (error) {
       console.error('Signup error:', error);
@@ -89,6 +94,7 @@ const SignupDialog = ({ isOpen, onClose }: SignupDialogProps) => {
     } else {
       // Enviar webhook com os dados do usuário
       await sendWebhook({
+        id: data?.user?.id,
         name: formData.name,
         email: formData.email
       });
