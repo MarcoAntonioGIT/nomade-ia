@@ -2,10 +2,21 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import SignupDialog from '@/components/SignupDialog';
+import { useAuth } from '@/contexts/AuthContext';
+import { User, LogOut } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 const Navbar = () => {
-  const [isSignupOpen, setIsSignupOpen] = useState(false);
+  const { user, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
 
   return (
     <header className="py-4 border-b border-border">
@@ -21,9 +32,11 @@ const Navbar = () => {
           <Link to="/" className="text-muted-foreground hover:text-foreground transition-colors">
             Início
           </Link>
-          <Link to="/my-trips" className="text-muted-foreground hover:text-foreground transition-colors">
-            Minhas Viagens
-          </Link>
+          {user && (
+            <Link to="/my-trips" className="text-muted-foreground hover:text-foreground transition-colors">
+              Minhas Viagens
+            </Link>
+          )}
           <Link to="/offers" className="text-muted-foreground hover:text-foreground transition-colors">
             Ofertas
           </Link>
@@ -35,23 +48,41 @@ const Navbar = () => {
           </Link>
         </nav>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" className="hidden md:flex">
-            Entrar
-          </Button>
-          <Button 
-            size="sm" 
-            className="bg-nomade-orange hover:bg-nomade-orange/90"
-            onClick={() => setIsSignupOpen(true)}
-          >
-            Criar conta
-          </Button>
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="flex items-center gap-2">
+                  <User className="h-4 w-4" />
+                  <span className="hidden md:inline">
+                    {user.user_metadata?.full_name || user.email}
+                  </span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem asChild>
+                  <Link to="/my-trips" className="flex items-center gap-2">
+                    <User className="h-4 w-4" />
+                    Minhas Viagens
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleSignOut} className="flex items-center gap-2">
+                  <LogOut className="h-4 w-4" />
+                  Sair
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <>
+              <Button variant="outline" size="sm" asChild>
+                <Link to="/auth">Entrar</Link>
+              </Button>
+              <Button size="sm" className="bg-nomade-orange hover:bg-nomade-orange/90" asChild>
+                <Link to="/auth">Criar conta</Link>
+              </Button>
+            </>
+          )}
         </div>
       </div>
-      
-      <SignupDialog 
-        isOpen={isSignupOpen} 
-        onClose={() => setIsSignupOpen(false)} 
-      />
     </header>
   );
 };

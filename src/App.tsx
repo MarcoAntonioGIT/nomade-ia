@@ -4,7 +4,10 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "@/contexts/AuthContext";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
+import AuthPage from "./pages/AuthPage";
 import PlannerPage from "./pages/PlannerPage";
 import SummaryPage from "./pages/SummaryPage";
 import ItineraryPage from "./pages/ItineraryPage";
@@ -23,18 +26,45 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/planner" element={<PlannerPage />} />
-          <Route path="/summary" element={<SummaryPage />} />
-          <Route path="/itinerary" element={<ItineraryPage />} />
-          <Route path="/offers" element={<OffersPage />} />
-          <Route path="/result" element={<ResultPage />} />
-          <Route path="/my-trips" element={<MyTripsPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/auth" element={<AuthPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/planner" element={
+              <ProtectedRoute>
+                <PlannerPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/summary" element={
+              <ProtectedRoute>
+                <SummaryPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/itinerary" element={
+              <ProtectedRoute>
+                <ItineraryPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/offers" element={
+              <ProtectedRoute>
+                <OffersPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/result" element={
+              <ProtectedRoute>
+                <ResultPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/my-trips" element={
+              <ProtectedRoute>
+                <MyTripsPage />
+              </ProtectedRoute>
+            } />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
