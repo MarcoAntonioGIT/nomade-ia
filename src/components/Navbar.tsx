@@ -7,8 +7,8 @@ const Navbar = () => {
   return (
     <header className="py-4 border-b border-border">
       <div className="container flex justify-between items-center">
-        <Link to="/" className="font-heading font-bold text-2xl text-travel-blue">
-          SmartTravel
+        <Link to="/" className="font-heading font-bold text-2xl text-nomade-turquoise">
+          Nomade IA
         </Link>
         <nav className="hidden md:flex gap-6 items-center">
           <Link to="/" className="text-muted-foreground hover:text-foreground transition-colors">
@@ -31,7 +31,7 @@ const Navbar = () => {
           <Button variant="outline" size="sm" className="hidden md:flex">
             Entrar
           </Button>
-          <Button size="sm" className="bg-travel-blue hover:bg-travel-blue/90">
+          <Button size="sm" className="bg-nomade-orange hover:bg-nomade-orange/90">
             Criar conta
           </Button>
         </div>

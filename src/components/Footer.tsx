@@ -8,7 +8,7 @@ const Footer = () => {
       <div className="container">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="font-heading font-bold text-lg mb-4">SmartTravel</h3>
+            <h3 className="font-heading font-bold text-lg mb-4">Nomade IA</h3>
             <p className="text-muted-foreground text-sm">
               Viagens personalizadas com a ajuda de inteligência artificial para proporcionar
               experiências únicas e inesquecíveis.
@@ -34,14 +34,14 @@ const Footer = () => {
           <div>
             <h4 className="font-heading font-semibold text-base mb-3">Contato</h4>
             <ul className="space-y-2">
-              <li className="text-sm text-muted-foreground">contato@smarttravel.ai</li>
+              <li className="text-sm text-muted-foreground">contato@nomadeia.com</li>
               <li className="text-sm text-muted-foreground">+55 (11) 9999-9999</li>
               <li className="text-sm text-muted-foreground">São Paulo, Brasil</li>
             </ul>
           </div>
         </div>
         <div className="border-t border-border mt-8 pt-6 text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} SmartTravel. Todos os direitos reservados.</p>
+          <p>&copy; {new Date().getFullYear()} Nomade IA. Todos os direitos reservados.</p>
         </div>
       </div>
     </footer>
