@@ -2,10 +2,21 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { LogIn } from 'lucide-react';
 import SignupDialog from '@/components/SignupDialog';
+import LoginDialog from '@/components/LoginDialog';
+import { useAuth } from '@/contexts/AuthContext';
+import { toast } from 'sonner';
 
 const Navbar = () => {
   const [isSignupOpen, setIsSignupOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const { user, signOut, loading } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+    toast.success('Logout realizado com sucesso!');
+  };
 
   return (
     <header className="py-4 border-b border-border">
@@ -34,23 +45,54 @@ const Navbar = () => {
             Contato
           </Link>
         </nav>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" className="hidden md:flex">
-            Entrar
-          </Button>
-          <Button 
-            size="sm" 
-            className="bg-nomade-orange hover:bg-nomade-orange/90"
-            onClick={() => setIsSignupOpen(true)}
-          >
-            Criar conta
-          </Button>
+        
+        <div className="flex gap-2 items-center">
+          {loading ? (
+            <div className="text-sm text-muted-foreground">Carregando...</div>
+          ) : user ? (
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-muted-foreground hidden md:inline">
+                Olá, {user.email}
+              </span>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={handleSignOut}
+              >
+                Sair
+              </Button>
+            </div>
+          ) : (
+            <>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="hidden md:flex"
+                onClick={() => setIsLoginOpen(true)}
+              >
+                <LogIn className="w-4 h-4 mr-2" />
+                Entrar
+              </Button>
+              <Button 
+                size="sm" 
+                className="bg-nomade-orange hover:bg-nomade-orange/90"
+                onClick={() => setIsSignupOpen(true)}
+              >
+                Criar conta
+              </Button>
+            </>
+          )}
         </div>
       </div>
       
       <SignupDialog 
         isOpen={isSignupOpen} 
         onClose={() => setIsSignupOpen(false)} 
+      />
+      
+      <LoginDialog 
+        isOpen={isLoginOpen} 
+        onClose={() => setIsLoginOpen(false)} 
       />
     </header>
   );
