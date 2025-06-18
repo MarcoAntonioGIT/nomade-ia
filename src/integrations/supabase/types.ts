@@ -9,7 +9,95 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      audit_log: {
+        Row: {
+          action: string
+          context: Json | null
+          created_at: string | null
+          id: number
+          ip: unknown | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          context?: Json | null
+          created_at?: string | null
+          id?: number
+          ip?: unknown | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          context?: Json | null
+          created_at?: string | null
+          id?: number
+          ip?: unknown | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          full_name: string | null
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      roles: {
+        Row: {
+          description: string | null
+          name: string
+          role_id: string
+        }
+        Insert: {
+          description?: string | null
+          name: string
+          role_id?: string
+        }
+        Update: {
+          description?: string | null
+          name?: string
+          role_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          role_id: string
+          user_id: string
+        }
+        Insert: {
+          role_id: string
+          user_id: string
+        }
+        Update: {
+          role_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_roles_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "roles"
+            referencedColumns: ["role_id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
