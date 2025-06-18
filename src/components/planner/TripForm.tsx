@@ -72,7 +72,7 @@ const TripForm = () => {
     console.log("Enviando dados do formulário para webhook:", formData);
 
     try {
-      const response = await fetch('https://n8n.nomadeia.com.br/webhook-test/gerar-roteiro', {
+      const response = await fetch('https://n8n.tomatize.com/webhook/smarttravelai', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

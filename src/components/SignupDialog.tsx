@@ -10,8 +10,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useAuth } from '@/contexts/AuthContext';
-import { toast } from 'sonner';
+import { useToast } from '@/hooks/use-toast';
 
 interface SignupDialogProps {
   isOpen: boolean;
@@ -25,90 +24,61 @@ const SignupDialog = ({ isOpen, onClose }: SignupDialogProps) => {
     password: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { signUp } = useAuth();
+  const { toast } = useToast();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const sendWebhook = async (userData: { id?: string; name: string; email: string }) => {
-    try {
-      console.log('Enviando webhook para n8n:', userData);
-      
-      const response = await fetch('https://n8n.nomadeia.com.br/webhook-test/cadastro-usuario', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          id: userData.id,
-          name: userData.name,
-          email: userData.email,
-          timestamp: new Date().toISOString(),
-          source: 'nomade-ia-signup'
-        }),
-      });
-      
-      if (response.ok) {
-        console.log('Webhook enviado com sucesso');
-      } else {
-        console.error('Erro na resposta do webhook:', response.status);
-      }
-    } catch (error) {
-      console.error('Erro ao enviar webhook:', error);
-      // Não bloqueamos o signup se o webhook falhar
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!formData.name || !formData.email || !formData.password) {
-      toast.error('Por favor, preencha todos os campos.');
+      toast({
+        title: "Campos obrigatórios",
+        description: "Por favor, preencha todos os campos.",
+        variant: "destructive",
+      });
       return;
     }
 
     if (formData.password.length < 6) {
-      toast.error('A senha deve ter pelo menos 6 caracteres.');
+      toast({
+        title: "Senha muito curta",
+        description: "A senha deve ter pelo menos 6 caracteres.",
+        variant: "destructive",
+      });
       return;
     }
 
     setIsSubmitting(true);
     
-    const { data, error } = await signUp(
-      formData.email,
-      formData.password,
-      formData.name
-    );
-    
-    if (error) {
-      console.error('Signup error:', error);
-      if (error.message.includes('User already registered')) {
-        toast.error('Este email já está cadastrado. Tente fazer login.');
-      } else if (error.message.includes('Password should be at least')) {
-        toast.error('A senha deve ter pelo menos 6 caracteres.');
-      } else {
-        toast.error('Erro ao criar conta. Tente novamente.');
-      }
-    } else {
-      // Enviar webhook com os dados do usuário
-      await sendWebhook({
-        id: data?.user?.id,
-        name: formData.name,
-        email: formData.email
+    try {
+      // Simulação de criação de conta
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      toast({
+        title: "Conta criada com sucesso!",
+        description: "Bem-vindo ao Nomade IA. Você pode fazer login agora.",
       });
       
-      toast.success('Conta criada com sucesso! Verifique seu email para confirmar.');
       setFormData({
         name: '',
         email: '',
         password: '',
       });
+      
       onClose();
+    } catch (error) {
+      toast({
+        title: "Erro ao criar conta",
+        description: "Ocorreu um erro ao criar sua conta. Tente novamente.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
-    
-    setIsSubmitting(false);
   };
 
   return (
