@@ -10,7 +10,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
+import { toast } from 'sonner';
 
 interface SignupDialogProps {
   isOpen: boolean;
@@ -24,7 +25,7 @@ const SignupDialog = ({ isOpen, onClose }: SignupDialogProps) => {
     password: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
+  const { signUp } = useAuth();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -35,50 +36,39 @@ const SignupDialog = ({ isOpen, onClose }: SignupDialogProps) => {
     e.preventDefault();
     
     if (!formData.name || !formData.email || !formData.password) {
-      toast({
-        title: "Campos obrigatórios",
-        description: "Por favor, preencha todos os campos.",
-        variant: "destructive",
-      });
+      toast.error('Por favor, preencha todos os campos.');
       return;
     }
 
     if (formData.password.length < 6) {
-      toast({
-        title: "Senha muito curta",
-        description: "A senha deve ter pelo menos 6 caracteres.",
-        variant: "destructive",
-      });
+      toast.error('A senha deve ter pelo menos 6 caracteres.');
       return;
     }
 
     setIsSubmitting(true);
     
-    try {
-      // Simulação de criação de conta
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      toast({
-        title: "Conta criada com sucesso!",
-        description: "Bem-vindo ao Nomade IA. Você pode fazer login agora.",
-      });
-      
+    const { error } = await signUp(formData.email, formData.password);
+    
+    if (error) {
+      console.error('Signup error:', error);
+      if (error.message.includes('User already registered')) {
+        toast.error('Este email já está cadastrado. Tente fazer login.');
+      } else if (error.message.includes('Password should be at least')) {
+        toast.error('A senha deve ter pelo menos 6 caracteres.');
+      } else {
+        toast.error('Erro ao criar conta. Tente novamente.');
+      }
+    } else {
+      toast.success('Conta criada com sucesso! Verifique seu email para confirmar.');
       setFormData({
         name: '',
         email: '',
         password: '',
       });
-      
       onClose();
-    } catch (error) {
-      toast({
-        title: "Erro ao criar conta",
-        description: "Ocorreu um erro ao criar sua conta. Tente novamente.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
     }
+    
+    setIsSubmitting(false);
   };
 
   return (
