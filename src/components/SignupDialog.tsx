@@ -32,6 +32,30 @@ const SignupDialog = ({ isOpen, onClose }: SignupDialogProps) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const sendWebhook = async (userData: { name: string; email: string }) => {
+    try {
+      console.log('Enviando webhook para n8n:', userData);
+      
+      await fetch('https://n8n.nomadeia.com.br/webhook-test/cadastro-usuario', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: userData.name,
+          email: userData.email,
+          timestamp: new Date().toISOString(),
+          source: 'nomade-ia-signup'
+        }),
+      });
+      
+      console.log('Webhook enviado com sucesso');
+    } catch (error) {
+      console.error('Erro ao enviar webhook:', error);
+      // Não bloqueamos o signup se o webhook falhar
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -59,6 +83,12 @@ const SignupDialog = ({ isOpen, onClose }: SignupDialogProps) => {
         toast.error('Erro ao criar conta. Tente novamente.');
       }
     } else {
+      // Enviar webhook com os dados do usuário
+      await sendWebhook({
+        name: formData.name,
+        email: formData.email
+      });
+      
       toast.success('Conta criada com sucesso! Verifique seu email para confirmar.');
       setFormData({
         name: '',
