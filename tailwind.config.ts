@@ -67,12 +67,10 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Cores da Nomade IA
+				// Cores da Nomade IA atualizadas
 				nomade: {
-					'turquoise': '#3DC9B3',
-					'dark-blue': '#1A1A2E',
-					'orange': '#FF8C42',
-					'light-turquoise': '#E8F8F5',
+					'navy': '#053757',
+					'orange': '#fd7738',
 					'light-orange': '#FFF4F0',
 				}
 			},
