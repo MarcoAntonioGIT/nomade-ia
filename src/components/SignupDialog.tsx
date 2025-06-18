@@ -36,7 +36,7 @@ const SignupDialog = ({ isOpen, onClose }: SignupDialogProps) => {
     try {
       console.log('Enviando webhook para n8n:', userData);
       
-      await fetch('https://n8n.nomadeia.com.br/webhook-test/cadastro-usuario', {
+      const response = await fetch('https://n8n.nomadeia.com.br/webhook-test/cadastro-usuario', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -49,7 +49,11 @@ const SignupDialog = ({ isOpen, onClose }: SignupDialogProps) => {
         }),
       });
       
-      console.log('Webhook enviado com sucesso');
+      if (response.ok) {
+        console.log('Webhook enviado com sucesso');
+      } else {
+        console.error('Erro na resposta do webhook:', response.status);
+      }
     } catch (error) {
       console.error('Erro ao enviar webhook:', error);
       // Não bloqueamos o signup se o webhook falhar

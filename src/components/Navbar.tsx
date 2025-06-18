@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { LogIn } from 'lucide-react';
 import SignupDialog from '@/components/SignupDialog';
 import LoginDialog from '@/components/LoginDialog';
 import { useAuth } from '@/contexts/AuthContext';
@@ -70,7 +69,6 @@ const Navbar = () => {
                 className="hidden md:flex"
                 onClick={() => setIsLoginOpen(true)}
               >
-                <LogIn className="w-4 h-4 mr-2" />
                 Entrar
               </Button>
               <Button 

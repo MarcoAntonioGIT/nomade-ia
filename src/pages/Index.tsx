@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import TripForm from '@/components/planner/TripForm';
 
 const Index = () => {
   return (
@@ -12,7 +13,7 @@ const Index = () => {
       
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="relative h-[80vh] flex items-center overflow-hidden">
+        <section className="relative h-[60vh] flex items-center overflow-hidden">
           <div className="absolute inset-0 bg-black/50 z-10"></div>
           <video 
             className="absolute inset-0 w-full h-full object-cover"
@@ -33,11 +34,22 @@ const Index = () => {
               <p className="text-lg md:text-xl mb-8">
                 Combinamos tecnologia avançada com conhecimento profundo de turismo para criar o roteiro perfeito para você.
               </p>
-              <Link to="/planner">
-                <Button size="lg" className="bg-nomade-orange hover:bg-nomade-orange/90 text-white font-semibold px-8 py-6 text-xl">
-                  Planeje sua viagem
-                </Button>
-              </Link>
+            </div>
+          </div>
+        </section>
+        
+        {/* Trip Planning Section */}
+        <section className="py-16 bg-white">
+          <div className="container">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-3xl md:text-4xl font-bold font-heading text-center mb-6">
+                Planeje sua viagem dos sonhos
+              </h2>
+              <p className="text-center text-muted-foreground mb-12">
+                Preencha o formulário abaixo com suas preferências e nossa IA criará um roteiro personalizado para você.
+              </p>
+              
+              <TripForm />
             </div>
           </div>
         </section>
@@ -72,14 +84,6 @@ const Index = () => {
                   Reserve tudo em um só lugar e aproveite sua viagem com acesso ao seu itinerário pelo aplicativo.
                 </p>
               </div>
-            </div>
-            
-            <div className="text-center mt-12">
-              <Link to="/planner">
-                <Button className="bg-nomade-dark-blue hover:bg-nomade-dark-blue/90 text-white">
-                  Comece agora
-                </Button>
-              </Link>
             </div>
           </div>
         </section>
@@ -169,23 +173,6 @@ const Index = () => {
                 </div>
               ))}
             </div>
-          </div>
-        </section>
-        
-        {/* CTA Section */}
-        <section className="py-16 bg-nomade-dark-blue">
-          <div className="container text-center">
-            <h2 className="text-3xl font-bold font-heading text-white mb-6">
-              Pronto para planejar sua próxima aventura?
-            </h2>
-            <p className="text-white/80 text-lg mb-8 max-w-2xl mx-auto">
-              Deixe nossa inteligência artificial criar um roteiro personalizado que atenda às suas preferências e orçamento.
-            </p>
-            <Link to="/planner">
-              <Button size="lg" className="bg-nomade-orange hover:bg-nomade-orange/90 text-white">
-                Planeje sua viagem agora
-              </Button>
-            </Link>
           </div>
         </section>
       </main>
