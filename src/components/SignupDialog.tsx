@@ -31,6 +31,35 @@ const SignupDialog = ({ isOpen, onClose }: SignupDialogProps) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const sendWebhook = async (userData: { name: string; email: string }) => {
+    try {
+      console.log('Enviando webhook para:', 'https://n8n.nomadeia.com.br/webhook-test/cadastro-usuario');
+      console.log('Dados do usuário:', userData);
+
+      const response = await fetch('https://n8n.nomadeia.com.br/webhook-test/cadastro-usuario', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nome: userData.name,
+          email: userData.email,
+          timestamp: new Date().toISOString(),
+          origem: 'cadastro_site'
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
+      }
+
+      console.log('Webhook enviado com sucesso');
+    } catch (error) {
+      console.error('Erro ao enviar webhook:', error);
+      // Não vamos mostrar erro do webhook para o usuário, pois a conta foi criada com sucesso
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -57,6 +86,12 @@ const SignupDialog = ({ isOpen, onClose }: SignupDialogProps) => {
     try {
       // Simulação de criação de conta
       await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Enviar webhook com as informações do usuário
+      await sendWebhook({
+        name: formData.name,
+        email: formData.email
+      });
       
       toast({
         title: "Conta criada com sucesso!",
