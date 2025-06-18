@@ -34,7 +34,7 @@ const Footer = () => {
           <div>
             <h4 className="font-heading font-semibold text-base mb-3">Contato</h4>
             <ul className="space-y-2">
-              <li className="text-sm text-muted-foreground">contato@nomadeia.com</li>
+              <li className="text-sm text-muted-foreground">contato@nomadeia.com.br</li>
               <li className="text-sm text-muted-foreground">+55 (11) 9999-9999</li>
               <li className="text-sm text-muted-foreground">São Paulo, Brasil</li>
             </ul>
