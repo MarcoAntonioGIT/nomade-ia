@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
@@ -47,6 +46,8 @@ const MyTripsPage = () => {
 
   const fetchUserData = async () => {
     try {
+      console.log('Fetching data for user:', user?.id);
+      
       // Fetch user's itineraries
       const { data: itinerariesData, error: itinerariesError } = await supabase
         .from('itineraries')
@@ -56,7 +57,13 @@ const MyTripsPage = () => {
 
       if (itinerariesError) {
         console.error('Error fetching itineraries:', itinerariesError);
+        toast({
+          title: "Erro ao carregar roteiros",
+          description: "Não foi possível carregar seus roteiros. Tente novamente.",
+          variant: "destructive",
+        });
       } else {
+        console.log('Fetched itineraries:', itinerariesData);
         setTrips(itinerariesData || []);
       }
 
@@ -76,7 +83,13 @@ const MyTripsPage = () => {
 
       if (packagesError) {
         console.error('Error fetching packages:', packagesError);
+        toast({
+          title: "Erro ao carregar pacotes",
+          description: "Não foi possível carregar seus pacotes. Tente novamente.",
+          variant: "destructive",
+        });
       } else {
+        console.log('Fetched packages:', packagesData);
         const formattedPackages = packagesData?.map(pkg => ({
           id: pkg.id,
           package_id: pkg.package_id,

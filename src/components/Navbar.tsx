@@ -18,6 +18,12 @@ const Navbar = () => {
     await signOut();
   };
 
+  // Get user display name from Supabase user metadata or email
+  const getUserDisplayName = () => {
+    if (!user) return '';
+    return user.user_metadata?.full_name || user.email || 'User';
+  };
+
   return (
     <header className="py-4 border-b border-border">
       <div className="container flex justify-between items-center">
@@ -54,7 +60,7 @@ const Navbar = () => {
                 <Button variant="outline" size="sm" className="flex items-center gap-2">
                   <User className="h-4 w-4" />
                   <span className="hidden md:inline">
-                    {user.fullName || user.email}
+                    {getUserDisplayName()}
                   </span>
                 </Button>
               </DropdownMenuTrigger>
