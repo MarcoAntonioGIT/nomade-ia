@@ -54,7 +54,7 @@ const Navbar = () => {
                 <Button variant="outline" size="sm" className="flex items-center gap-2">
                   <User className="h-4 w-4" />
                   <span className="hidden md:inline">
-                    {user.user_metadata?.full_name || user.email}
+                    {user.fullName || user.email}
                   </span>
                 </Button>
               </DropdownMenuTrigger>

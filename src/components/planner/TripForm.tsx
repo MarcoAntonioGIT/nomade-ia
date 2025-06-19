@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Slider } from '@/components/ui/slider';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 
 export type TripFormData = {
   origin: string;
@@ -33,6 +34,7 @@ const TripForm = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -68,24 +70,36 @@ const TripForm = () => {
       return;
     }
 
+    if (!user) {
+      toast({
+        title: "Autenticação necessária",
+        description: "Você precisa estar logado para gerar um roteiro.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsGenerating(true);
     console.log("Enviando dados do formulário para webhook:", formData);
 
     try {
-      const response = await fetch('https://n8n.tomatize.com/webhook/smarttravelai', {
+      const token = localStorage.getItem('authToken');
+      const response = await fetch('https://n8n.tomatize.com/webhook/generate-itinerary', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          userId: user.id,
+        }),
       });
 
       if (response.ok) {
-        // Tratar a resposta como texto simples
         const responseText = await response.text();
         console.log("Resposta do webhook:", responseText);
         
-        // Salvar os dados no localStorage para uso nas próximas páginas
         localStorage.setItem('tripFormData', JSON.stringify(formData));
         localStorage.setItem('webhookResponse', responseText);
         

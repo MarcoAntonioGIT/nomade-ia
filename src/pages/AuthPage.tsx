@@ -43,9 +43,7 @@ const AuthPage = () => {
       if (error) {
         toast({
           title: "Erro ao fazer login",
-          description: error.message === 'Invalid login credentials' 
-            ? "Email ou senha incorretos" 
-            : error.message,
+          description: error.message,
           variant: "destructive",
         });
       } else {
@@ -86,17 +84,15 @@ const AuthPage = () => {
       if (error) {
         toast({
           title: "Erro ao criar conta",
-          description: error.message === 'User already registered' 
-            ? "Este email já está cadastrado" 
-            : error.message,
+          description: error.message,
           variant: "destructive",
         });
       } else {
         toast({
           title: "Conta criada com sucesso!",
-          description: "Verifique seu email para confirmar sua conta.",
+          description: "Bem-vindo ao Nomade IA!",
         });
-        setSignupForm({ fullName: '', email: '', password: '' });
+        navigate('/');
       }
     } catch (error) {
       toast({
