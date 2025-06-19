@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -34,7 +33,7 @@ const TripForm = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, session } = useAuth();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -70,7 +69,7 @@ const TripForm = () => {
       return;
     }
 
-    if (!user) {
+    if (!user || !session) {
       toast({
         title: "Autenticação necessária",
         description: "Você precisa estar logado para gerar um roteiro.",
@@ -81,25 +80,30 @@ const TripForm = () => {
 
     setIsGenerating(true);
     console.log("Enviando dados do formulário para webhook:", formData);
+    console.log("Session token:", session.access_token);
 
     try {
-      const token = localStorage.getItem('authToken');
-      const response = await fetch('https://n8n.tomatize.com/webhook/generate-itinerary', {
+      const response = await fetch('https://n8n.nomadeia.com.br/webhook-test/gerar-roteiro', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${session.access_token}`,
         },
         body: JSON.stringify({
           ...formData,
           userId: user.id,
+          userEmail: user.email,
         }),
       });
 
+      console.log("Response status:", response.status);
+      console.log("Response headers:", response.headers);
+
       if (response.ok) {
         const responseText = await response.text();
-        console.log("Resposta do webhook:", responseText);
+        console.log("Resposta do webhook (texto):", responseText);
         
+        // Store form data and response
         localStorage.setItem('tripFormData', JSON.stringify(formData));
         localStorage.setItem('webhookResponse', responseText);
         
@@ -110,13 +114,39 @@ const TripForm = () => {
         
         navigate('/result');
       } else {
-        throw new Error(`Erro na requisição: ${response.status}`);
+        const errorText = await response.text();
+        console.error("Erro na resposta:", response.status, errorText);
+        
+        let errorMessage = "Ocorreu um erro ao processar sua solicitação.";
+        
+        if (response.status === 401) {
+          errorMessage = "Erro de autenticação. Tente fazer login novamente.";
+        } else if (response.status === 400) {
+          errorMessage = "Dados inválidos enviados. Verifique os campos preenchidos.";
+        } else if (response.status === 500) {
+          errorMessage = "Erro interno do servidor. Tente novamente em alguns minutos.";
+        } else if (response.status === 404) {
+          errorMessage = "Serviço não encontrado. Verifique a configuração.";
+        }
+
+        toast({
+          title: "Erro ao gerar roteiro",
+          description: errorMessage,
+          variant: "destructive",
+        });
       }
     } catch (error) {
-      console.error("Erro ao enviar dados para webhook:", error);
+      console.error("Erro de rede ao enviar dados para webhook:", error);
+      
+      let errorMessage = "Erro de conexão. Verifique sua internet e tente novamente.";
+      
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        errorMessage = "Não foi possível conectar ao servidor. Tente novamente.";
+      }
+
       toast({
-        title: "Erro ao gerar roteiro",
-        description: "Ocorreu um erro ao processar sua solicitação. Tente novamente.",
+        title: "Erro de conexão",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
