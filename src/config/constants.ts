@@ -2,10 +2,10 @@
 export const API_CONFIG = {
   BASE_URL: 'https://n8n.nomadeia.com.br',
   ENDPOINTS: {
-    TRIP_GENERATION: '/webhook/gerar-roteiro',
-    PACKAGES: '/webhook/pacotes',
-    OFFERS: '/webhook/ofertas',
-    USER_TRIPS: '/webhook/minhas-viagens',
+    TRIP_GENERATION: '/webhook-test/gerar-roteiro',
+    PACKAGES: '/webhook-test/pacotes',
+    OFFERS: '/webhook-test/ofertas',
+    USER_TRIPS: '/webhook-test/minhas-viagens',
   },
   TIMEOUT: 30000, // 30 seconds
 } as const;

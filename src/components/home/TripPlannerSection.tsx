@@ -71,7 +71,7 @@ const TripPlannerSection = ({ onTripGenerated, onAuthRequired }: TripPlannerSect
     console.log("Session token:", session.access_token);
 
     try {
-      const response = await fetch('https://n8n.nomadeia.com.br/webhook/gerar-roteiro', {
+      const response = await fetch('https://n8n.nomadeia.com.br/webhook-test/gerar-roteiro', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
