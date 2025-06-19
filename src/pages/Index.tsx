@@ -6,7 +6,7 @@ import Footer from '@/components/Footer';
 import TripPlannerSection from '@/components/home/TripPlannerSection';
 import TravelPackages from '@/components/packages/TravelPackages';
 import SignupDialog from '@/components/SignupDialog';
-import { TripFormData } from '@/components/home/TripPlannerSection';
+import { TripFormData } from '@/components/forms/TripFormFields';
 
 const Index = () => {
   const [isSignupOpen, setIsSignupOpen] = useState(false);
