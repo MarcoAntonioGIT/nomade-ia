@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
@@ -6,6 +5,7 @@ import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Copy, Download, Share2 } from 'lucide-react';
+import LoadingSpinner from '@/components/ui/loading-spinner';
 
 const ResultPage = () => {
   const [webhookResponse, setWebhookResponse] = useState<string>('');
@@ -103,10 +103,10 @@ const ResultPage = () => {
       <div className="min-h-screen flex flex-col">
         <Navbar />
         <main className="flex-grow flex items-center justify-center">
-          <div className="flex flex-col items-center space-y-4">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-nomade-orange"></div>
-            <p className="text-muted-foreground">Carregando resultado...</p>
-          </div>
+          <LoadingSpinner 
+            title="Carregando resultado..."
+            className="min-h-[200px]"
+          />
         </main>
         <Footer />
       </div>
