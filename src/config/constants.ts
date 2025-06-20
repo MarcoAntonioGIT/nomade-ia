@@ -2,10 +2,10 @@
 export const API_CONFIG = {
   BASE_URL: 'https://n8n.nomadeia.com.br',
   ENDPOINTS: {
-    TRIP_GENERATION: '/webhook-test/gerar-roteiro',
-    PACKAGES: '/webhook-test/pacotes',
-    OFFERS: '/webhook-test/ofertas',
-    USER_TRIPS: '/webhook-test/minhas-viagens',
+    TRIP_GENERATION: '/webhook/gerar-roteiro',
+    PACKAGES: '/webhook/pacotes',
+    OFFERS: '/webhook/ofertas',
+    USER_TRIPS: '/webhook/minhas-viagens',
   },
   TIMEOUT: 30000, // 30 seconds
 } as const;
@@ -106,4 +106,4 @@ export const FEATURE_FLAGS = {
   ENABLE_ANALYTICS: process.env.NODE_ENV === 'production',
   ENABLE_DEBUG_MODE: process.env.NODE_ENV === 'development',
   ENABLE_BETA_FEATURES: false,
-} as const; 
+} as const;

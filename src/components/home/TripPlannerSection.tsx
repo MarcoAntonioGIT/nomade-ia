@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -5,6 +6,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import TripFormFields, { TripFormData } from '@/components/forms/TripFormFields';
 import LoadingSpinner from '@/components/ui/loading-spinner';
+import { API_CONFIG } from '@/config/constants';
 
 interface TripPlannerSectionProps {
   onTripGenerated: (data: TripFormData, packages: any[]) => void;
@@ -71,7 +73,7 @@ const TripPlannerSection = ({ onTripGenerated, onAuthRequired }: TripPlannerSect
     console.log("Session token:", session.access_token);
 
     try {
-      const response = await fetch('https://n8n.nomadeia.com.br/webhook-test/gerar-roteiro', {
+      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.TRIP_GENERATION}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
