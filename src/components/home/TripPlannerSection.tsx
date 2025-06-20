@@ -1,12 +1,12 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
-import TripFormFields, { TripFormData } from '@/components/forms/TripFormFields';
+import TripFormFields from '@/components/forms/TripFormFields';
+import { TripFormData } from '@/types';
 import LoadingSpinner from '@/components/ui/loading-spinner';
-import { API_CONFIG } from '@/config/constants';
+import { apiService } from '@/services/api';
 
 interface TripPlannerSectionProps {
   onTripGenerated: (data: TripFormData, packages: any[]) => void;
@@ -19,7 +19,6 @@ const TripPlannerSection = ({ onTripGenerated, onAuthRequired }: TripPlannerSect
     destination: '',
     budget: 5000,
     budgetText: 'R$ 5.000',
-    days: 5,
     people: 2,
     preferences: [],
     dietaryRestrictions: [],
@@ -100,33 +99,14 @@ const TripPlannerSection = ({ onTripGenerated, onAuthRequired }: TripPlannerSect
     }
 
     setIsGenerating(true);
-    console.log("Enviando dados do formulário para webhook:", formData);
-    console.log("Session token:", session.access_token);
+    console.log("Enviando dados do formulário:", formData);
 
     try {
-      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.TRIP_GENERATION}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`,
-        },
-        body: JSON.stringify({
-          ...formData,
-          userId: user.id,
-          userEmail: user.email,
-        }),
-      });
-
-      console.log("Response status:", response.status);
-      console.log("Response headers:", response.headers);
-
-      if (response.ok) {
-        const responseText = await response.text();
-        console.log("Resposta do webhook (texto):", responseText);
-        
-        // Store form data and response
-        localStorage.setItem('tripFormData', JSON.stringify(formData));
-        localStorage.setItem('webhookResponse', responseText);
+      const response = await apiService.generateTrip(formData);
+      
+      if (response.success && response.data) {
+        // Save to storage
+        apiService.saveTripToStorage(formData, JSON.stringify(response.data));
         
         toast({
           title: "Roteiro gerado com sucesso!",
@@ -135,29 +115,28 @@ const TripPlannerSection = ({ onTripGenerated, onAuthRequired }: TripPlannerSect
         
         navigate('/result');
       } else {
-        const errorText = await response.text();
-        console.error("Erro na resposta:", response.status, errorText);
-        
-        let errorMessage = "Ocorreu um erro ao processar sua solicitação.";
-        
-        if (response.status === 401) {
-          errorMessage = "Erro de autenticação. Tente fazer login novamente.";
-        } else if (response.status === 500) {
-          errorMessage = "Erro interno do servidor. Tente novamente em alguns minutos.";
-        }
-
-        toast({
-          title: "Erro ao gerar roteiro",
-          description: errorMessage,
-          variant: "destructive",
-        });
+        throw new Error(response.error || 'Erro desconhecido');
       }
     } catch (error) {
-      console.error("Erro de rede ao enviar dados para webhook:", error);
+      console.error("Erro ao gerar roteiro:", error);
       
+      let errorMessage = "Ocorreu um erro ao processar sua solicitação.";
+      
+      if (error instanceof Error) {
+        if (error.message.includes('AUTH_REQUIRED')) {
+          errorMessage = "Erro de autenticação. Tente fazer login novamente.";
+        } else if (error.message.includes('NETWORK_ERROR')) {
+          errorMessage = "Erro de conexão. Verifique sua internet e tente novamente.";
+        } else if (error.message.includes('TIMEOUT')) {
+          errorMessage = "Tempo limite excedido. Tente novamente.";
+        } else {
+          errorMessage = error.message;
+        }
+      }
+
       toast({
-        title: "Erro de conexão",
-        description: "Erro de conexão. Verifique sua internet e tente novamente.",
+        title: "Erro ao gerar roteiro",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {

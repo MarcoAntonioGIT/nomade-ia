@@ -1,13 +1,22 @@
 // API Configuration
 export const API_CONFIG = {
-  BASE_URL: 'https://n8n.nomadeia.com.br',
+  BASE_URL: import.meta.env.VITE_API_BASE_URL || 'https://n8n.nomadeia.com.br',
   ENDPOINTS: {
-    TRIP_GENERATION: '/webhook/gerar-roteiro',
-    PACKAGES: '/webhook/pacotes',
-    OFFERS: '/webhook/ofertas',
-    USER_TRIPS: '/webhook/minhas-viagens',
+    TRIP_GENERATION: '/webhook-test/gerar-roteiro',
+    PACKAGES: '/webhook-test/pacotes',
+    OFFERS: '/webhook-test/ofertas',
+    USER_TRIPS: '/webhook-test/minhas-viagens',
   },
   TIMEOUT: 30000, // 30 seconds
+} as const;
+
+// Test API Configuration (fallback)
+export const TEST_API_CONFIG = {
+  BASE_URL: 'https://httpbin.org',
+  ENDPOINTS: {
+    TEST: '/post',
+  },
+  TIMEOUT: 10000, // 10 seconds
 } as const;
 
 // App Configuration
@@ -29,8 +38,6 @@ export const UI_CONFIG = {
 export const VALIDATION_RULES = {
   MIN_BUDGET: 100,
   MAX_BUDGET: 100000,
-  MIN_DAYS: 1,
-  MAX_DAYS: 30,
   MIN_PEOPLE: 1,
   MAX_PEOPLE: 10,
   PASSWORD_MIN_LENGTH: 6,

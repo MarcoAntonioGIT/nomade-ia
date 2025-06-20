@@ -1,10 +1,9 @@
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { TripFormData } from '@/components/forms/TripFormFields';
+import { TripFormData } from '@/types';
 
 type ItineraryDay = {
   day: number;
@@ -54,6 +53,14 @@ const TripItinerary = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  const calculateDuration = (startDate: string, endDate: string): number => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const diffTime = Math.abs(end.getTime() - start.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
+
   useEffect(() => {
     const storedData = localStorage.getItem('tripFormData');
     if (!storedData) {
@@ -73,7 +80,11 @@ const TripItinerary = () => {
   }, [navigate]);
 
   const generateMockItinerary = (data: TripFormData): Itinerary => {
-    const days = Array.from({ length: data.days }, (_, i) => ({
+    const duration = data.departureDate && data.returnDate 
+      ? calculateDuration(data.departureDate, data.returnDate)
+      : 5; // fallback para 5 dias
+
+    const days = Array.from({ length: duration }, (_, i) => ({
       day: i + 1,
       activities: [
         {
@@ -100,12 +111,12 @@ const TripItinerary = () => {
     }));
 
     return {
-      summary: `Um roteiro personalizado de ${data.days} dias em ${data.destination} para ${data.people} ${data.people === 1 ? 'pessoa' : 'pessoas'}, com foco em ${data.preferences.join(', ') || 'turismo geral'}.`,
+      summary: `Um roteiro personalizado de ${duration} dias em ${data.destination} para ${data.people} ${data.people === 1 ? 'pessoa' : 'pessoas'}, com foco em ${data.preferences.join(', ') || 'turismo geral'}.`,
       days,
       accommodation: {
         name: `Hotel Central ${data.destination}`,
         description: 'Hotel 4 estrelas com excelente localização, café da manhã incluso, Wi-Fi grátis e piscina.',
-        price: Math.round(data.budget * 0.4 / data.days),
+        price: Math.round(data.budget * 0.4 / duration),
         imageUrl: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
       },
       flights: {
@@ -124,7 +135,7 @@ const TripItinerary = () => {
           price: Math.round(data.budget * 0.3),
         },
       },
-      weather: Array.from({ length: data.days }, (_, i) => ({
+      weather: Array.from({ length: duration }, (_, i) => ({
         date: new Date(Date.now() + i * 24 * 60 * 60 * 1000).toLocaleDateString('pt-BR'),
         condition: ['Ensolarado', 'Parcialmente nublado', 'Nublado'][Math.floor(Math.random() * 3)],
         temperature: Math.floor(Math.random() * 10) + 25,
@@ -298,8 +309,16 @@ const TripItinerary = () => {
             <CardContent>
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <p className="text-muted-foreground">Hospedagem ({tripData?.days} noites)</p>
-                  <p>R$ {(itinerary.accommodation.price * (tripData?.days || 0)).toLocaleString('pt-BR')}</p>
+                  <p className="text-muted-foreground">
+                    Hospedagem ({tripData?.departureDate && tripData?.returnDate 
+                      ? `${calculateDuration(tripData.departureDate, tripData.returnDate)} noites`
+                      : 'noites não definidas'
+                    })
+                  </p>
+                  <p>R$ {(itinerary.accommodation.price * (tripData?.departureDate && tripData?.returnDate 
+                    ? calculateDuration(tripData.departureDate, tripData.returnDate)
+                    : 0
+                  )).toLocaleString('pt-BR')}</p>
                 </div>
                 <div className="flex justify-between">
                   <p className="text-muted-foreground">Voos</p>

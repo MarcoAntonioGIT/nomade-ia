@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,20 +10,7 @@ import { Button } from '@/components/ui/button';
 import { CalendarIcon, ArrowLeftRight } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
-
-export type TripFormData = {
-  origin: string;
-  destination: string;
-  budget: number;
-  budgetText: string;
-  days: number;
-  people: number;
-  preferences: string[];
-  dietaryRestrictions: string[];
-  departureDate?: string;
-  returnDate?: string;
-  additionalInfo?: string;
-};
+import { TripFormData } from '@/types';
 
 interface TripFormFieldsProps {
   formData: TripFormData;
@@ -70,7 +56,11 @@ const TripFormFields = ({
   };
 
   const parseDateFromString = (dateString?: string): Date | undefined => {
-    return dateString ? new Date(dateString) : undefined;
+    if (!dateString) return undefined;
+    
+    // Parse a data no formato YYYY-MM-DD considerando o fuso horário local
+    const [year, month, day] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day); // month - 1 porque Date usa 0-based months
   };
 
   return (
@@ -168,7 +158,7 @@ const TripFormFields = ({
                 onSelect={(date) => onDateChange?.('returnDate', date)}
                 disabled={(date) => 
                   date < new Date() || 
-                  (formData.departureDate && date <= new Date(formData.departureDate))
+                  (formData.departureDate && date <= (parseDateFromString(formData.departureDate) || new Date()))
                 }
                 initialFocus
                 className="pointer-events-auto"
@@ -194,33 +184,18 @@ const TripFormFields = ({
         </p>
       </div>
 
-      {/* Número de pessoas e dias */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-2">
-          <Label htmlFor="days">Número de dias: {formData.days}</Label>
-          <Slider
-            id="days"
-            min={1}
-            max={30}
-            step={1}
-            value={[formData.days]}
-            onValueChange={(value) => onSliderChange('days', value)}
-            className="py-4"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="people">Número de pessoas: {formData.people}</Label>
-          <Slider
-            id="people"
-            min={1}
-            max={10}
-            step={1}
-            value={[formData.people]}
-            onValueChange={(value) => onSliderChange('people', value)}
-            className="py-4"
-          />
-        </div>
+      {/* Número de pessoas */}
+      <div className="space-y-2">
+        <Label htmlFor="people">Número de pessoas: {formData.people}</Label>
+        <Slider
+          id="people"
+          min={1}
+          max={10}
+          step={1}
+          value={[formData.people]}
+          onValueChange={(value) => onSliderChange('people', value)}
+          className="py-4"
+        />
       </div>
 
       {/* Preferências */}

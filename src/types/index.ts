@@ -20,14 +20,11 @@ export interface TripFormData {
   destination: string;
   budget: number;
   budgetText: string;
-  days: number;
   people: number;
   preferences: string[];
   dietaryRestrictions: string[];
-  startDate?: string;
-  endDate?: string;
-  departureDate?: string;
-  returnDate?: string;
+  departureDate: string;
+  returnDate: string;
   additionalInfo?: string;
 }
 

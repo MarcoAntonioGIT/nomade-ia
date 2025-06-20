@@ -1,15 +1,22 @@
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { TripFormData } from '@/components/forms/TripFormFields';
+import { TripFormData } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 
 const TripSummary = () => {
   const [tripData, setTripData] = useState<TripFormData | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  const calculateDuration = (startDate: string, endDate: string): number => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const diffTime = Math.abs(end.getTime() - start.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
 
   useEffect(() => {
     const storedData = localStorage.getItem('tripFormData');
@@ -65,7 +72,12 @@ const TripSummary = () => {
             </div>
             <div className="bg-muted rounded-md p-4">
               <h3 className="text-sm text-muted-foreground">Duração</h3>
-              <p className="text-lg font-semibold">{tripData.days} {tripData.days === 1 ? 'dia' : 'dias'}</p>
+              <p className="text-lg font-semibold">
+                {tripData.departureDate && tripData.returnDate 
+                  ? `${calculateDuration(tripData.departureDate, tripData.returnDate)} ${calculateDuration(tripData.departureDate, tripData.returnDate) === 1 ? 'dia' : 'dias'}`
+                  : 'Não definido'
+                }
+              </p>
             </div>
             <div className="bg-muted rounded-md p-4">
               <h3 className="text-sm text-muted-foreground">Viajantes</h3>

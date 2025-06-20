@@ -1,13 +1,12 @@
-
 import { useState, useCallback } from 'react';
 import { TripFormData } from '@/types';
+import { format } from 'date-fns';
 
 const initialFormData: TripFormData = {
   origin: '',
   destination: '',
   budget: 5000,
   budgetText: 'R$ 5.000',
-  days: 5,
   people: 2,
   preferences: [],
   dietaryRestrictions: [],
@@ -48,7 +47,7 @@ export const useTripForm = () => {
   const updateDateField = useCallback((field: 'departureDate' | 'returnDate', date: Date | undefined) => {
     setFormData(prev => ({
       ...prev,
-      [field]: date ? date.toISOString().split('T')[0] : '',
+      [field]: date ? format(date, 'yyyy-MM-dd') : '',
     }));
   }, []);
 
@@ -89,10 +88,6 @@ export const useTripForm = () => {
 
     if (formData.budget < 100) {
       errors.push('Orçamento mínimo é R$ 100');
-    }
-
-    if (formData.days < 1) {
-      errors.push('Mínimo de 1 dia');
     }
 
     if (formData.people < 1) {

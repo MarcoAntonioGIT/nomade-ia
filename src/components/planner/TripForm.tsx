@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -95,6 +94,44 @@ const TripForm: React.FC = () => {
     }
   }, [formData, user, session, toast, navigate, validateForm]);
 
+  const handleTestConnectivity = useCallback(async () => {
+    try {
+      // First test general internet connectivity
+      const internetOk = await apiService.testInternetConnectivity();
+      
+      if (!internetOk) {
+        toast({
+          title: "Problema de Internet",
+          description: "Não foi possível conectar à internet. Verifique sua conexão.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Then test webhook connectivity
+      const webhookOk = await apiService.testWebhookConnectivity();
+      
+      if (webhookOk) {
+        toast({
+          title: "Conectividade OK",
+          description: "Webhook está acessível e funcionando.",
+        });
+      } else {
+        toast({
+          title: "Problema no Webhook",
+          description: "Internet OK, mas webhook não está acessível. Verifique a URL.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Erro no Teste",
+        description: "Erro ao testar conectividade.",
+        variant: "destructive",
+      });
+    }
+  }, [toast]);
+
   if (isGenerating) {
     return (
       <LoadingSpinner 
@@ -122,6 +159,16 @@ const TripForm: React.FC = () => {
         size="lg"
       >
         {isGenerating ? 'Processando...' : 'Planejar Viagem'}
+      </Button>
+
+      <Button 
+        type="button" 
+        onClick={handleTestConnectivity}
+        className="w-full md:w-auto bg-gray-500 hover:bg-gray-600 text-white px-8 py-3"
+        size="lg"
+        variant="outline"
+      >
+        Testar Conectividade
       </Button>
     </form>
   );

@@ -70,7 +70,19 @@ class ApiService {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), API_CONFIG.TIMEOUT);
 
-      const response = await fetch(`${API_CONFIG.BASE_URL}${endpoint}`, {
+      const url = `${API_CONFIG.BASE_URL}${endpoint}`;
+      
+      // Debug logging in development
+      if (import.meta.env.DEV) {
+        console.log('=== DEBUG API REQUEST ===');
+        console.log('URL:', url);
+        console.log('Method:', options.method || 'GET');
+        console.log('Headers:', headers);
+        console.log('Body:', options.body);
+        console.log('=======================');
+      }
+
+      const response = await fetch(url, {
         ...options,
         headers: {
           ...headers,
@@ -80,8 +92,28 @@ class ApiService {
       });
 
       clearTimeout(timeoutId);
+      
+      // Debug logging in development
+      if (import.meta.env.DEV) {
+        console.log('=== DEBUG API RESPONSE ===');
+        console.log('Status:', response.status);
+        console.log('Status Text:', response.statusText);
+        console.log('Headers:', Object.fromEntries(response.headers.entries()));
+        console.log('========================');
+      }
+
       return await this.handleResponse<T>(response);
     } catch (error) {
+      // Enhanced error logging
+      console.error('=== API REQUEST ERROR ===');
+      console.error('Endpoint:', endpoint);
+      console.error('URL:', `${API_CONFIG.BASE_URL}${endpoint}`);
+      console.error('Error Type:', error instanceof Error ? error.constructor.name : typeof error);
+      console.error('Error Message:', error instanceof Error ? error.message : error);
+      console.error('Error Stack:', error instanceof Error ? error.stack : 'No stack available');
+      console.error('Timestamp:', new Date().toISOString());
+      console.error('========================');
+
       if (error instanceof Error) {
         if (error.name === 'AbortError') {
           throw {
@@ -116,13 +148,34 @@ class ApiService {
       } as AppError;
     }
 
+    // Debug: Log all form data being sent
+    const requestData = {
+      ...tripData,
+      userId: user.id,
+      userEmail: user.email,
+    };
+
+    console.log('=== DADOS ENVIADOS AO WEBHOOK ===');
+    console.log('URL:', `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.TRIP_GENERATION}`);
+    console.log('Dados completos:', JSON.stringify(requestData, null, 2));
+    console.log('Campos do formulário:');
+    console.log('- Origin:', requestData.origin);
+    console.log('- Destination:', requestData.destination);
+    console.log('- Budget:', requestData.budget);
+    console.log('- Budget Text:', requestData.budgetText);
+    console.log('- People:', requestData.people);
+    console.log('- Preferences:', requestData.preferences);
+    console.log('- Dietary Restrictions:', requestData.dietaryRestrictions);
+    console.log('- Departure Date:', requestData.departureDate);
+    console.log('- Return Date:', requestData.returnDate);
+    console.log('- Additional Info:', requestData.additionalInfo);
+    console.log('- User ID:', requestData.userId);
+    console.log('- User Email:', requestData.userEmail);
+    console.log('================================');
+
     return this.makeRequest<TripGenerationResponse>(API_CONFIG.ENDPOINTS.TRIP_GENERATION, {
       method: 'POST',
-      body: JSON.stringify({
-        ...tripData,
-        userId: user.id,
-        userEmail: user.email,
-      }),
+      body: JSON.stringify(requestData),
     });
   }
 
@@ -187,6 +240,78 @@ class ApiService {
       localStorage.removeItem(STORAGE_KEYS.TRIP_TIMESTAMP);
     } catch (error) {
       console.error('Error clearing trip from storage:', error);
+    }
+  }
+
+  // Test webhook connectivity
+  async testWebhookConnectivity(): Promise<boolean> {
+    try {
+      const url = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.TRIP_GENERATION}`;
+      
+      console.log('=== TESTING WEBHOOK CONNECTIVITY ===');
+      console.log('URL:', url);
+      
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          test: true,
+          message: 'Test connectivity',
+          timestamp: new Date().toISOString(),
+        }),
+      });
+      
+      console.log('Response Status:', response.status);
+      console.log('Response OK:', response.ok);
+      
+      if (response.ok) {
+        console.log('✅ Webhook is accessible');
+        return true;
+      } else {
+        console.log('❌ Webhook returned error status:', response.status);
+        return false;
+      }
+    } catch (error) {
+      console.error('❌ Webhook connectivity test failed:', error);
+      return false;
+    }
+  }
+
+  // Test general internet connectivity
+  async testInternetConnectivity(): Promise<boolean> {
+    try {
+      const url = 'https://httpbin.org/post';
+      
+      console.log('=== TESTING INTERNET CONNECTIVITY ===');
+      console.log('URL:', url);
+      
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          test: true,
+          message: 'Test internet connectivity',
+          timestamp: new Date().toISOString(),
+        }),
+      });
+      
+      console.log('Response Status:', response.status);
+      console.log('Response OK:', response.ok);
+      
+      if (response.ok) {
+        console.log('✅ Internet connectivity is working');
+        return true;
+      } else {
+        console.log('❌ Internet connectivity test failed');
+        return false;
+      }
+    } catch (error) {
+      console.error('❌ Internet connectivity test failed:', error);
+      return false;
     }
   }
 }
