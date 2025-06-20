@@ -4,7 +4,8 @@ export interface User {
   email?: string;
   full_name?: string;
   created_at: string;
-  updated_at: string;
+  updated_at?: string;
+  user_metadata?: any;
 }
 
 export interface AuthState {
@@ -18,12 +19,16 @@ export interface TripFormData {
   origin: string;
   destination: string;
   budget: number;
+  budgetText: string;
   days: number;
   people: number;
   preferences: string[];
   dietaryRestrictions: string[];
   startDate?: string;
   endDate?: string;
+  departureDate?: string;
+  returnDate?: string;
+  additionalInfo?: string;
 }
 
 export interface TripPreferences {
@@ -228,4 +233,4 @@ export const PACKAGE_CATEGORIES = {
   standard: 'Padrão',
   premium: 'Premium',
   luxury: 'Luxo'
-} as const; 
+} as const;

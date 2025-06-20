@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -17,7 +18,9 @@ const TripForm: React.FC = () => {
     formData, 
     updateInputField, 
     updateSliderField, 
-    updateCheckboxField, 
+    updateCheckboxField,
+    updateDateField,
+    updateBudgetField,
     validateForm 
   } = useTripForm();
 
@@ -108,12 +111,15 @@ const TripForm: React.FC = () => {
         onInputChange={updateInputField}
         onSliderChange={updateSliderField}
         onCheckboxChange={updateCheckboxField}
+        onDateChange={updateDateField}
+        onBudgetChange={updateBudgetField}
       />
 
       <Button 
         type="submit" 
-        className="w-full md:w-auto bg-nomade-orange hover:bg-nomade-orange/90 text-white"
+        className="w-full md:w-auto bg-nomade-orange hover:bg-nomade-orange/90 text-white px-8 py-3"
         disabled={isGenerating}
+        size="lg"
       >
         {isGenerating ? 'Processando...' : 'Planejar Viagem'}
       </Button>

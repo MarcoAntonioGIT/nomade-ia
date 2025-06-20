@@ -18,10 +18,14 @@ const TripPlannerSection = ({ onTripGenerated, onAuthRequired }: TripPlannerSect
     origin: '',
     destination: '',
     budget: 5000,
+    budgetText: 'R$ 5.000',
     days: 5,
     people: 2,
     preferences: [],
     dietaryRestrictions: [],
+    departureDate: '',
+    returnDate: '',
+    additionalInfo: '',
   });
   
   const [isGenerating, setIsGenerating] = useState(false);
@@ -29,7 +33,7 @@ const TripPlannerSection = ({ onTripGenerated, onAuthRequired }: TripPlannerSect
   const navigate = useNavigate();
   const { user, session } = useAuth();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -47,6 +51,24 @@ const TripPlannerSection = ({ onTripGenerated, onAuthRequired }: TripPlannerSect
     }));
   };
 
+  const handleDateChange = (field: 'departureDate' | 'returnDate', date: Date | undefined) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: date ? date.toISOString().split('T')[0] : '',
+    }));
+  };
+
+  const handleBudgetChange = (budgetText: string) => {
+    const numbers = budgetText.replace(/\D/g, '');
+    const budgetValue = numbers ? parseInt(numbers, 10) : 0;
+    
+    setFormData((prev) => ({
+      ...prev,
+      budgetText,
+      budget: budgetValue,
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -54,6 +76,15 @@ const TripPlannerSection = ({ onTripGenerated, onAuthRequired }: TripPlannerSect
       toast({
         title: "Campos obrigatórios",
         description: "Por favor, preencha a origem e o destino da sua viagem.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!formData.departureDate || !formData.returnDate) {
+      toast({
+        title: "Campos obrigatórios",
+        description: "Por favor, selecione as datas de ida e volta.",
         variant: "destructive",
       });
       return;
@@ -160,6 +191,8 @@ const TripPlannerSection = ({ onTripGenerated, onAuthRequired }: TripPlannerSect
               onInputChange={handleInputChange}
               onSliderChange={handleSliderChange}
               onCheckboxChange={handleCheckboxChange}
+              onDateChange={handleDateChange}
+              onBudgetChange={handleBudgetChange}
             />
 
             <div className="text-center">
