@@ -9,7 +9,6 @@ const initialFormData: TripFormData = {
   budgetText: 'R$ 5.000',
   people: 2,
   preferences: [],
-  dietaryRestrictions: [],
   departureDate: '',
   returnDate: '',
   additionalInfo: '',
@@ -32,7 +31,7 @@ export const useTripForm = () => {
   }, [updateField]);
 
   const updateCheckboxField = useCallback((
-    category: 'preferences' | 'dietaryRestrictions',
+    category: 'preferences',
     value: string,
     checked: boolean
   ) => {
@@ -60,6 +59,14 @@ export const useTripForm = () => {
       ...prev,
       budgetText,
       budget: budgetValue,
+    }));
+  }, []);
+
+  const swapOriginDestination = useCallback(() => {
+    setFormData(prev => ({
+      ...prev,
+      origin: prev.destination,
+      destination: prev.origin,
     }));
   }, []);
 
@@ -108,6 +115,7 @@ export const useTripForm = () => {
     updateCheckboxField,
     updateDateField,
     updateBudgetField,
+    swapOriginDestination,
     resetForm,
     validateForm,
   };

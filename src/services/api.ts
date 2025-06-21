@@ -165,7 +165,6 @@ class ApiService {
     console.log('- Budget Text:', requestData.budgetText);
     console.log('- People:', requestData.people);
     console.log('- Preferences:', requestData.preferences);
-    console.log('- Dietary Restrictions:', requestData.dietaryRestrictions);
     console.log('- Departure Date:', requestData.departureDate);
     console.log('- Return Date:', requestData.returnDate);
     console.log('- Additional Info:', requestData.additionalInfo);

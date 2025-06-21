@@ -22,7 +22,6 @@ export interface TripFormData {
   budgetText: string;
   people: number;
   preferences: string[];
-  dietaryRestrictions: string[];
   departureDate: string;
   returnDate: string;
   additionalInfo?: string;

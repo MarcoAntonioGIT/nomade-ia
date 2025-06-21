@@ -16,9 +16,10 @@ interface TripFormFieldsProps {
   formData: TripFormData;
   onInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onSliderChange: (name: string, value: number[]) => void;
-  onCheckboxChange: (category: 'preferences' | 'dietaryRestrictions', value: string, checked: boolean) => void;
+  onCheckboxChange: (category: 'preferences', value: string, checked: boolean) => void;
   onDateChange?: (field: 'departureDate' | 'returnDate', date: Date | undefined) => void;
   onBudgetChange?: (value: string) => void;
+  onSwapOriginDestination?: () => void;
 }
 
 const formatCurrency = (value: string): string => {
@@ -46,7 +47,8 @@ const TripFormFields = ({
   onSliderChange, 
   onCheckboxChange,
   onDateChange,
-  onBudgetChange
+  onBudgetChange,
+  onSwapOriginDestination
 }: TripFormFieldsProps) => {
   const handleBudgetInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatCurrency(e.target.value);
@@ -81,7 +83,16 @@ const TripFormFields = ({
         </div>
 
         <div className="flex justify-center">
-          <ArrowLeftRight className="h-6 w-6 text-muted-foreground mt-8" />
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            onClick={onSwapOriginDestination}
+            className="h-12 w-12 rounded-full hover:bg-gray-100"
+            title="Trocar origem e destino"
+          >
+            <ArrowLeftRight className="h-5 w-5" />
+          </Button>
         </div>
 
         <div className="space-y-2">
@@ -213,27 +224,6 @@ const TripFormFields = ({
               />
               <label htmlFor={`pref-${pref}`} className="text-sm cursor-pointer">
                 {pref}
-              </label>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Restrições alimentares */}
-      <div className="space-y-3">
-        <Label>Restrições alimentares (opcional)</Label>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-          {['Vegetariano', 'Vegano', 'Sem glúten', 'Sem lactose', 'Kosher', 'Halal'].map((diet) => (
-            <div key={diet} className="flex items-center space-x-2">
-              <Checkbox
-                id={`diet-${diet}`}
-                checked={formData.dietaryRestrictions.includes(diet)}
-                onCheckedChange={(checked) =>
-                  onCheckboxChange('dietaryRestrictions', diet, checked as boolean)
-                }
-              />
-              <label htmlFor={`diet-${diet}`} className="text-sm cursor-pointer">
-                {diet}
               </label>
             </div>
           ))}

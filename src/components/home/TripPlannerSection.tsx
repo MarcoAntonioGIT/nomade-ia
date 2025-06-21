@@ -21,7 +21,6 @@ const TripPlannerSection = ({ onTripGenerated, onAuthRequired }: TripPlannerSect
     budgetText: 'R$ 5.000',
     people: 2,
     preferences: [],
-    dietaryRestrictions: [],
     departureDate: '',
     returnDate: '',
     additionalInfo: '',
@@ -41,7 +40,7 @@ const TripPlannerSection = ({ onTripGenerated, onAuthRequired }: TripPlannerSect
     setFormData((prev) => ({ ...prev, [name]: value[0] }));
   };
 
-  const handleCheckboxChange = (category: 'preferences' | 'dietaryRestrictions', value: string, checked: boolean) => {
+  const handleCheckboxChange = (category: 'preferences', value: string, checked: boolean) => {
     setFormData((prev) => ({
       ...prev,
       [category]: checked
@@ -68,6 +67,14 @@ const TripPlannerSection = ({ onTripGenerated, onAuthRequired }: TripPlannerSect
     }));
   };
 
+  const handleSwapOriginDestination = () => {
+    setFormData((prev) => ({
+      ...prev,
+      origin: prev.destination,
+      destination: prev.origin,
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -80,10 +87,10 @@ const TripPlannerSection = ({ onTripGenerated, onAuthRequired }: TripPlannerSect
       return;
     }
 
-    if (!formData.departureDate || !formData.returnDate) {
+    if (!formData.departureDate) {
       toast({
         title: "Campos obrigatórios",
-        description: "Por favor, selecione as datas de ida e volta.",
+        description: "Por favor, selecione a data de ida.",
         variant: "destructive",
       });
       return;
@@ -172,6 +179,7 @@ const TripPlannerSection = ({ onTripGenerated, onAuthRequired }: TripPlannerSect
               onCheckboxChange={handleCheckboxChange}
               onDateChange={handleDateChange}
               onBudgetChange={handleBudgetChange}
+              onSwapOriginDestination={handleSwapOriginDestination}
             />
 
             <div className="text-center">

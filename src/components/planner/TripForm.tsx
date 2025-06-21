@@ -20,6 +20,7 @@ const TripForm: React.FC = () => {
     updateCheckboxField,
     updateDateField,
     updateBudgetField,
+    swapOriginDestination,
     validateForm 
   } = useTripForm();
 
@@ -150,6 +151,7 @@ const TripForm: React.FC = () => {
         onCheckboxChange={updateCheckboxField}
         onDateChange={updateDateField}
         onBudgetChange={updateBudgetField}
+        onSwapOriginDestination={swapOriginDestination}
       />
 
       <Button 

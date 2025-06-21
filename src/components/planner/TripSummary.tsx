@@ -97,19 +97,6 @@ const TripSummary = () => {
               </div>
             </div>
           )}
-
-          {tripData.dietaryRestrictions.length > 0 && (
-            <div>
-              <h3 className="text-sm text-muted-foreground mb-2">Restrições alimentares</h3>
-              <div className="flex flex-wrap gap-2">
-                {tripData.dietaryRestrictions.map((diet) => (
-                  <span key={diet} className="bg-travel-light-green text-travel-green px-3 py-1 rounded-full text-sm">
-                    {diet}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
         </CardContent>
       </Card>
 
