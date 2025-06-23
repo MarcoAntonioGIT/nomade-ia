@@ -7,6 +7,7 @@ import TripFormFields from '@/components/forms/TripFormFields';
 import { TripFormData } from '@/types';
 import LoadingSpinner from '@/components/ui/loading-spinner';
 import { apiService } from '@/services/api';
+import TravelPackages from '@/components/packages/TravelPackages';
 
 interface TripPlannerSectionProps {
   onTripGenerated: (data: TripFormData, packages: any[]) => void;
@@ -156,6 +157,9 @@ const TripPlannerSection = ({ onTripGenerated, onAuthRequired }: TripPlannerSect
     }
   };
 
+  // Dados de exemplo para ofertas (pode ser substituído por props ou API futuramente)
+  const ofertasPacotes = [];
+
   if (isGenerating) {
     return (
       <LoadingSpinner 
@@ -166,41 +170,100 @@ const TripPlannerSection = ({ onTripGenerated, onAuthRequired }: TripPlannerSect
   }
 
   return (
-    <section className="py-16 bg-white">
-      <div className="container">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold font-heading text-center mb-4">
-            Planeje sua viagem
-          </h2>
-          <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-            Preencha suas preferências e nossa IA criará um roteiro personalizado com opções de pacotes exclusivas.
-          </p>
-          
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <TripFormFields
-              formData={formData}
-              onInputChange={handleInputChange}
-              onSliderChange={handleSliderChange}
-              onCheckboxChange={handleCheckboxChange}
-              onDateChange={handleDateChange}
-              onBudgetChange={handleBudgetChange}
-              onSwapOriginDestination={handleSwapOriginDestination}
-            />
-
-            <div className="text-center">
-              <Button 
-                type="submit" 
-                size="lg"
-                className="bg-nomade-orange hover:bg-nomade-orange/90 text-white px-8"
-                disabled={isGenerating}
-              >
-                {isGenerating ? 'Processando...' : 'Planejar Viagem'}
-              </Button>
-            </div>
-          </form>
+    <>
+      {/* Banner principal */}
+      <section className="relative h-[480px] flex items-center bg-cover bg-center" style={{ backgroundImage: "url('/public/banner-van.jpg'), url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80')" }}>
+        <div className="absolute inset-0 bg-black/60" />
+        <div className="relative z-10 container flex flex-col justify-center h-full">
+          <div className="max-w-2xl">
+            <h1 className="text-5xl md:text-6xl font-bold text-white mb-4 leading-tight drop-shadow-lg">
+              Monte sua viagem personalizada com <br /> inteligência artificial
+            </h1>
+            <p className="text-lg md:text-xl text-white mb-8 drop-shadow">
+              Combinamos tecnologia avançada com conhecimento profundo de turismo para criar o roteiro perfeito para você.
+            </p>
+            <Button 
+              size="lg" 
+              className="bg-nomade-orange hover:bg-nomade-orange/90 text-white px-8 text-lg font-semibold shadow-lg"
+              onClick={() => {
+                const el = document.getElementById('trip-form-section');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
+              Planeje sua viagem
+            </Button>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* Como funciona */}
+      <section className="py-16 bg-gray-50">
+        <div className="container">
+          <h2 className="text-3xl font-bold font-heading text-center mb-12">Como funciona</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <div className="bg-white rounded-xl shadow p-8 text-center">
+              <div className="text-4xl font-bold text-nomade-orange mb-2">1</div>
+              <h3 className="font-semibold text-xl mb-2">Preencha suas preferências</h3>
+              <p className="text-muted-foreground">Informe seu destino, datas, orçamento e preferências para que nossa IA entenda o que você busca.</p>
+            </div>
+            <div className="bg-white rounded-xl shadow p-8 text-center">
+              <div className="text-4xl font-bold text-nomade-orange mb-2">2</div>
+              <h3 className="font-semibold text-xl mb-2">Receba seu roteiro personalizado</h3>
+              <p className="text-muted-foreground">Nossa IA cria um roteiro detalhado com atrações, restaurantes e dicas locais adaptadas ao seu perfil.</p>
+            </div>
+            <div className="bg-white rounded-xl shadow p-8 text-center">
+              <div className="text-4xl font-bold text-nomade-orange mb-2">3</div>
+              <h3 className="font-semibold text-xl mb-2">Viaje com tranquilidade</h3>
+              <p className="text-muted-foreground">Reserve tudo em um só lugar e aproveite sua viagem com acesso ao seu itinerário pelo aplicativo.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Formulário de planejamento */}
+      <section id="trip-form-section" className="py-16 bg-white">
+        <div className="container">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl font-bold font-heading text-center mb-4">
+              Planeje sua viagem
+            </h2>
+            <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
+              Preencha suas preferências e nossa IA criará um roteiro personalizado com opções de pacotes exclusivas.
+            </p>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <TripFormFields
+                formData={formData}
+                onInputChange={handleInputChange}
+                onSliderChange={handleSliderChange}
+                onCheckboxChange={handleCheckboxChange}
+                onDateChange={handleDateChange}
+                onBudgetChange={handleBudgetChange}
+                onSwapOriginDestination={handleSwapOriginDestination}
+              />
+              <div className="text-center">
+                <Button 
+                  type="submit" 
+                  size="lg"
+                  className="bg-nomade-orange hover:bg-nomade-orange/90 text-white px-8"
+                  disabled={isGenerating}
+                >
+                  {isGenerating ? 'Processando...' : 'Planejar Viagem'}
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      {/* Ofertas de passagens aéreas */}
+      <section className="py-16 bg-muted">
+        <div className="container">
+          <h2 className="text-3xl font-bold font-heading mb-2">PASSAGENS AÉREAS</h2>
+          <p className="text-lg text-muted-foreground mb-8">Promoções encontradas nas últimas 12h!</p>
+          <TravelPackages packages={ofertasPacotes} onSelectPackage={() => {}} />
+        </div>
+      </section>
+    </>
   );
 };
 
