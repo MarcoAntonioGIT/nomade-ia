@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -29,7 +28,7 @@ const Navbar = () => {
       <div className="container flex justify-between items-center">
         <Link to="/" className="flex items-center space-x-2">
           <img 
-            src="/lovable-uploads/22eff577-f06c-41d7-93cc-d35c32a0be7c.png" 
+            src="/logo-nomade.png" 
             alt="Nomade IA" 
             className="h-10"
           />

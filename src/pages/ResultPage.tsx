@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 import { Copy, Download, Share2 } from 'lucide-react';
 import LoadingSpinner from '@/components/ui/loading-spinner';
 
@@ -11,16 +11,13 @@ const ResultPage = () => {
   const [webhookResponse, setWebhookResponse] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-  const { toast } = useToast();
 
   useEffect(() => {
     const storedResponse = localStorage.getItem('webhookResponse');
     
     if (!storedResponse) {
-      toast({
-        title: "Nenhum resultado encontrado",
+      toast.error("Nenhum resultado encontrado", {
         description: "Redirecionando para o planejador de viagem.",
-        variant: "destructive",
       });
       navigate('/planner');
       return;
@@ -43,7 +40,7 @@ const ResultPage = () => {
     
     setWebhookResponse(responseText);
     setIsLoading(false);
-  }, [navigate, toast]);
+  }, [navigate]);
 
   const handleNewTrip = () => {
     localStorage.removeItem('tripFormData');
@@ -54,15 +51,12 @@ const ResultPage = () => {
   const handleCopyItinerary = async () => {
     try {
       await navigator.clipboard.writeText(webhookResponse);
-      toast({
-        title: "Roteiro copiado!",
+      toast.success("Roteiro copiado!", {
         description: "O roteiro foi copiado para a área de transferência.",
       });
     } catch (error) {
-      toast({
-        title: "Erro ao copiar",
+      toast.error("Erro ao copiar", {
         description: "Não foi possível copiar o roteiro.",
-        variant: "destructive",
       });
     }
   };
@@ -76,8 +70,7 @@ const ResultPage = () => {
     element.click();
     document.body.removeChild(element);
     
-    toast({
-      title: "Download iniciado",
+    toast.info("Download iniciado", {
       description: "O roteiro está sendo baixado.",
     });
   };

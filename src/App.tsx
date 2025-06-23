@@ -1,5 +1,4 @@
 import React, { Suspense } from 'react';
-import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -12,10 +11,8 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 // Lazy load pages for better performance
 const Index = React.lazy(() => import("./pages/Index"));
 const AuthPage = React.lazy(() => import("./pages/AuthPage"));
+const ResetPasswordPage = React.lazy(() => import("./pages/ResetPasswordPage"));
 const PlannerPage = React.lazy(() => import("./pages/PlannerPage"));
-const SummaryPage = React.lazy(() => import("./pages/SummaryPage"));
-const ItineraryPage = React.lazy(() => import("./pages/ItineraryPage"));
-const OffersPage = React.lazy(() => import("./pages/OffersPage"));
 const ResultPage = React.lazy(() => import("./pages/ResultPage"));
 const MyTripsPage = React.lazy(() => import("./pages/MyTripsPage"));
 const AboutPage = React.lazy(() => import("./pages/AboutPage"));
@@ -52,7 +49,6 @@ const App: React.FC = () => {
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
-          <Toaster />
           <Sonner />
           <BrowserRouter>
             <AuthProvider>
@@ -61,6 +57,7 @@ const App: React.FC = () => {
                   {/* Public Routes */}
                   <Route path="/" element={<Index />} />
                   <Route path="/auth" element={<AuthPage />} />
+                  <Route path="/reset-password" element={<ResetPasswordPage />} />
                   <Route path="/about" element={<AboutPage />} />
                   <Route path="/contact" element={<ContactPage />} />
                   
@@ -68,21 +65,6 @@ const App: React.FC = () => {
                   <Route path="/planner" element={
                     <ProtectedRoute>
                       <PlannerPage />
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/summary" element={
-                    <ProtectedRoute>
-                      <SummaryPage />
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/itinerary" element={
-                    <ProtectedRoute>
-                      <ItineraryPage />
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/offers" element={
-                    <ProtectedRoute>
-                      <OffersPage />
                     </ProtectedRoute>
                   } />
                   <Route path="/result" element={

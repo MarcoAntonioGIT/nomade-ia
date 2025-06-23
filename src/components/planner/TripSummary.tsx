@@ -3,12 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { TripFormData } from '@/types';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 
 const TripSummary = () => {
   const [tripData, setTripData] = useState<TripFormData | null>(null);
   const navigate = useNavigate();
-  const { toast } = useToast();
 
   const calculateDuration = (startDate: string, endDate: string): number => {
     const start = new Date(startDate);
@@ -33,8 +32,7 @@ const TripSummary = () => {
 
   const handleGenerateItinerary = () => {
     // Simular tempo de processamento da IA
-    toast({
-      title: "Gerando roteiro",
+    toast.info("Gerando roteiro", {
       description: "Nossa IA está personalizando o melhor roteiro para você.",
     });
     

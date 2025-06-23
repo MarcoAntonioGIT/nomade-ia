@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@500;600;700;800&display=swap');
 
 @tailwind base;
@@ -60,4 +59,21 @@
   .fade-in {
     @apply animate-fade-in;
   }
+}
+
+/* Custom styles for the calendar to remove focus ring and set custom color */
+.rdp-day_selected, 
+.rdp-day_selected:focus, 
+.rdp-day_selected:hover {
+  background-color: hsl(var(--nomade-turquoise)) !important;
+  color: hsl(var(--nomade-white)) !important;
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.rdp-button:focus:not([disabled]) {
+  outline: none;
+  box-shadow: none;
+  border: 1px solid transparent; /* Ensure no border is added on focus */
 }

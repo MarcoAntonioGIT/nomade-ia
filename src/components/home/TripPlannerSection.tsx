@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 import { useAuth } from '@/contexts/AuthContext';
 import TripFormFields from '@/components/forms/TripFormFields';
 import { TripFormData } from '@/types';
@@ -27,7 +27,6 @@ const TripPlannerSection = ({ onTripGenerated, onAuthRequired }: TripPlannerSect
   });
   
   const [isGenerating, setIsGenerating] = useState(false);
-  const { toast } = useToast();
   const navigate = useNavigate();
   const { user, session } = useAuth();
 
@@ -50,10 +49,24 @@ const TripPlannerSection = ({ onTripGenerated, onAuthRequired }: TripPlannerSect
   };
 
   const handleDateChange = (field: 'departureDate' | 'returnDate', date: Date | undefined) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: date ? date.toISOString().split('T')[0] : '',
-    }));
+    if (date) {
+      // Manually format the date to YYYY-MM-DD string to avoid any timezone conversion.
+      // This is the most robust way to handle dates from a date picker.
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      const formattedDate = `${year}-${month}-${day}`;
+
+      setFormData((prev) => ({
+        ...prev,
+        [field]: formattedDate,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [field]: '',
+      }));
+    }
   };
 
   const handleBudgetChange = (budgetText: string) => {
@@ -79,26 +92,21 @@ const TripPlannerSection = ({ onTripGenerated, onAuthRequired }: TripPlannerSect
     e.preventDefault();
     
     if (!formData.origin || !formData.destination) {
-      toast({
-        title: "Campos obrigatórios",
+      toast.error("Campos obrigatórios", {
         description: "Por favor, preencha a origem e o destino da sua viagem.",
-        variant: "destructive",
       });
       return;
     }
 
     if (!formData.departureDate) {
-      toast({
-        title: "Campos obrigatórios",
+      toast.error("Campos obrigatórios", {
         description: "Por favor, selecione a data de ida.",
-        variant: "destructive",
       });
       return;
     }
 
     if (!user || !session) {
-      toast({
-        title: "Login necessário",
+      toast.error("Login necessário", {
         description: "Faça login para gerar um roteiro personalizado.",
       });
       onAuthRequired();
@@ -112,11 +120,10 @@ const TripPlannerSection = ({ onTripGenerated, onAuthRequired }: TripPlannerSect
       const response = await apiService.generateTrip(formData);
       
       if (response.success && response.data) {
-        // Save to storage
+        // Save to storage temporarily for immediate redirection
         apiService.saveTripToStorage(formData, JSON.stringify(response.data));
         
-        toast({
-          title: "Roteiro gerado com sucesso!",
+        toast.success("Roteiro gerado com sucesso!", {
           description: "Redirecionando para o resultado.",
         });
         
@@ -141,10 +148,8 @@ const TripPlannerSection = ({ onTripGenerated, onAuthRequired }: TripPlannerSect
         }
       }
 
-      toast({
-        title: "Erro ao gerar roteiro",
+      toast.error("Erro ao gerar roteiro", {
         description: errorMessage,
-        variant: "destructive",
       });
     } finally {
       setIsGenerating(false);

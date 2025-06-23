@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -7,16 +7,17 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/contexts/AuthContext';
+import { toast } from 'sonner';
+import { apiService } from '@/services/api';
 import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
 
 type Trip = {
   id: string;
   destination: string;
   origin: string;
-  preferences: any;
-  start_date: string;
-  end_date: string;
+  trip_title: string;
+  departure_date: string;
+  return_date: string;
   created_at: string;
   status: string;
 };
@@ -35,36 +36,19 @@ const MyTripsPage = () => {
   const [packages, setPackages] = useState<Package[]>([]);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
-  const { toast } = useToast();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (user) {
-      fetchUserData();
-    }
-  }, [user]);
+  const fetchUserData = useCallback(async () => {
+    if (!user) return;
 
-  const fetchUserData = async () => {
+    setLoading(true);
     try {
-      console.log('Fetching data for user:', user?.id);
-      
-      // Fetch user's itineraries
-      const { data: itinerariesData, error: itinerariesError } = await supabase
-        .from('itineraries')
-        .select('*')
-        .eq('user_id', user?.id)
-        .order('created_at', { ascending: false });
-
-      if (itinerariesError) {
-        console.error('Error fetching itineraries:', itinerariesError);
-        toast({
-          title: "Erro ao carregar roteiros",
-          description: "Não foi possível carregar seus roteiros. Tente novamente.",
-          variant: "destructive",
-        });
+      // Fetch user's itineraries using ApiService
+      const tripsResponse = await apiService.getUserTrips();
+      if (tripsResponse.success && tripsResponse.data) {
+        setTrips(tripsResponse.data);
       } else {
-        console.log('Fetched itineraries:', itinerariesData);
-        setTrips(itinerariesData || []);
+        throw new Error(tripsResponse.error || 'Failed to fetch trips');
       }
 
       // Fetch user's packages
@@ -83,10 +67,8 @@ const MyTripsPage = () => {
 
       if (packagesError) {
         console.error('Error fetching packages:', packagesError);
-        toast({
-          title: "Erro ao carregar pacotes",
+        toast.error("Erro ao carregar pacotes", {
           description: "Não foi possível carregar seus pacotes. Tente novamente.",
-          variant: "destructive",
         });
       } else {
         console.log('Fetched packages:', packagesData);
@@ -102,15 +84,17 @@ const MyTripsPage = () => {
       }
     } catch (error) {
       console.error('Error fetching user data:', error);
-      toast({
-        title: "Erro ao carregar dados",
+      toast.error("Erro ao carregar dados", {
         description: "Não foi possível carregar seus dados. Tente novamente.",
-        variant: "destructive",
       });
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    fetchUserData();
+  }, [fetchUserData]);
 
   const getStatusBadge = (status: string) => {
     const statusMap = {
@@ -187,10 +171,10 @@ const MyTripsPage = () => {
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {trips.map((trip) => (
-                      <Card key={trip.id} className="hover:shadow-lg transition-shadow">
+                      <Card key={trip.id} className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate(`/itinerary/${trip.id}`)}>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                           <CardTitle className="text-xl">
-                            {trip.origin} → {trip.destination}
+                            {trip.trip_title || `${trip.origin} → ${trip.destination}`}
                           </CardTitle>
                           {getStatusBadge(trip.status)}
                         </CardHeader>
@@ -198,26 +182,16 @@ const MyTripsPage = () => {
                           <div className="grid grid-cols-2 gap-4 text-sm">
                             <div>
                               <p className="text-muted-foreground">Duração</p>
-                              <p className="font-semibold">{calculateDays(trip.start_date, trip.end_date)} dias</p>
+                              <p className="font-medium">{calculateDays(trip.departure_date, trip.return_date)} dias</p>
                             </div>
                             <div>
-                              <p className="text-muted-foreground">Pessoas</p>
-                              <p className="font-semibold">{trip.preferences?.people || 'N/A'}</p>
+                              <p className="text-muted-foreground">Data</p>
+                              <p className="font-medium">{new Date(trip.departure_date).toLocaleDateString()}</p>
                             </div>
                           </div>
-                          
-                          <div className="text-sm text-muted-foreground">
-                            Criado em {new Date(trip.created_at).toLocaleDateString('pt-BR')}
-                          </div>
-
-                          <div className="flex gap-2 pt-2">
-                            <Button size="sm" variant="outline" className="flex-1">
-                              Ver Roteiro
-                            </Button>
-                            <Button size="sm" className="flex-1 bg-nomade-orange hover:bg-nomade-orange/90">
-                              Ver Pacotes
-                            </Button>
-                          </div>
+                          <Button variant="outline" className="w-full">
+                            Ver Detalhes
+                          </Button>
                         </CardContent>
                       </Card>
                     ))}
@@ -275,3 +249,4 @@ const MyTripsPage = () => {
 };
 
 export default MyTripsPage;
+

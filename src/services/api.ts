@@ -136,6 +136,49 @@ class ApiService {
     }
   }
 
+  // Save Trip to Database
+  async saveTripToDatabase(
+    tripData: TripFormData, 
+    tripResponse: TripGenerationResponse
+  ): Promise<ApiResponse<any>> {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    const tripRecord = {
+      user_id: user.id,
+      origin: tripData.origin,
+      destination: tripData.destination,
+      budget: tripData.budget,
+      people: tripData.people,
+      preferences: tripData.preferences,
+      departure_date: tripData.departureDate,
+      return_date: tripData.returnDate,
+      additional_info: tripData.additionalInfo,
+      itinerary_data: tripResponse.itinerary,
+      summary_data: tripResponse.summary,
+      packages_data: tripResponse.packages,
+      estimated_cost: tripResponse.estimatedCost,
+      trip_title: `Viagem para ${tripData.destination}`,
+    };
+
+    const { data, error } = await supabase
+      .from('itineraries')
+      .insert(tripRecord)
+      .select();
+
+    if (error) {
+      console.error('Error saving trip to database:', error);
+      throw {
+        code: 'DB_INSERT_ERROR',
+        message: 'Falha ao salvar a viagem no banco de dados.',
+        details: error.message,
+        timestamp: new Date().toISOString(),
+      } as AppError;
+    }
+
+    return { success: true, data: data[0] };
+  }
+
   // Trip Generation
   async generateTrip(tripData: TripFormData): Promise<ApiResponse<TripGenerationResponse>> {
     const { data: { user } } = await supabase.auth.getUser();
@@ -148,34 +191,38 @@ class ApiService {
       } as AppError;
     }
 
-    // Debug: Log all form data being sent
     const requestData = {
       ...tripData,
       userId: user.id,
       userEmail: user.email,
     };
 
-    console.log('=== DADOS ENVIADOS AO WEBHOOK ===');
-    console.log('URL:', `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.TRIP_GENERATION}`);
-    console.log('Dados completos:', JSON.stringify(requestData, null, 2));
-    console.log('Campos do formulário:');
-    console.log('- Origin:', requestData.origin);
-    console.log('- Destination:', requestData.destination);
-    console.log('- Budget:', requestData.budget);
-    console.log('- Budget Text:', requestData.budgetText);
-    console.log('- People:', requestData.people);
-    console.log('- Preferences:', requestData.preferences);
-    console.log('- Departure Date:', requestData.departureDate);
-    console.log('- Return Date:', requestData.returnDate);
-    console.log('- Additional Info:', requestData.additionalInfo);
-    console.log('- User ID:', requestData.userId);
-    console.log('- User Email:', requestData.userEmail);
-    console.log('================================');
-
-    return this.makeRequest<TripGenerationResponse>(API_CONFIG.ENDPOINTS.TRIP_GENERATION, {
+    const response = await this.makeRequest<TripGenerationResponse>(API_CONFIG.ENDPOINTS.TRIP_GENERATION, {
       method: 'POST',
       body: JSON.stringify(requestData),
     });
+
+    if (response.success && response.data) {
+      try {
+        // Save to database
+        await this.saveTripToDatabase(tripData, response.data);
+
+        // Save to storage temporarily for immediate redirection
+        this.saveTripToStorage(tripData, JSON.stringify(response.data));
+
+        // Ensure the original response is returned to the caller
+        return response;
+        
+      } catch (dbError) {
+        console.error('Database save failed, but trip was generated:', dbError);
+        // Even if DB save fails, proceed with the generated trip data for this session
+        this.saveTripToStorage(tripData, JSON.stringify(response.data));
+        return response; // Return original response
+      }
+    }
+    
+    // Ensure a consistent response format is always returned
+    return response;
   }
 
   // Get Travel Packages
@@ -185,8 +232,23 @@ class ApiService {
   }
 
   // Get User Trips
-  async getUserTrips(): Promise<ApiResponse<TripGenerationResponse[]>> {
-    return this.makeRequest<TripGenerationResponse[]>(API_CONFIG.ENDPOINTS.USER_TRIPS);
+  async getUserTrips(): Promise<ApiResponse<any[]>> {
+    const { data, error } = await supabase
+      .from('itineraries')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching user trips:', error);
+      throw {
+        code: 'DB_FETCH_ERROR',
+        message: 'Falha ao buscar as viagens do usuário.',
+        details: error.message,
+        timestamp: new Date().toISOString(),
+      } as AppError;
+    }
+    
+    return { success: true, data: data || [] };
   }
 
   // Get Offers

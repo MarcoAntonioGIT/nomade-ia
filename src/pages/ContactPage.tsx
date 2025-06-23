@@ -1,10 +1,9 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 import { Mail, Phone, MessageCircle, Bot, Sparkles } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -17,7 +16,6 @@ const ContactPage = () => {
     message: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -28,10 +26,8 @@ const ContactPage = () => {
     e.preventDefault();
     
     if (!formData.name || !formData.email || !formData.message) {
-      toast({
-        title: "Campos obrigatórios",
+      toast.error("Campos obrigatórios", {
         description: "Por favor, preencha todos os campos obrigatórios.",
-        variant: "destructive",
       });
       return;
     }
@@ -42,8 +38,7 @@ const ContactPage = () => {
       // Simulação de envio do email
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      toast({
-        title: "Mensagem enviada!",
+      toast.success("Mensagem enviada!", {
         description: "Recebemos sua mensagem e entraremos em contato em breve.",
       });
       
@@ -54,10 +49,8 @@ const ContactPage = () => {
         message: '',
       });
     } catch (error) {
-      toast({
-        title: "Erro ao enviar mensagem",
+      toast.error("Erro ao enviar mensagem", {
         description: "Ocorreu um erro ao enviar sua mensagem. Tente novamente.",
-        variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
