@@ -33,10 +33,10 @@ const HowItWorks: React.FC = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto relative">
           {steps.map((step, idx) => (
-            <div key={idx} className="relative">
-              <div className="flex flex-col items-center text-center p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-gray-100">
+            <div key={idx} className="relative flex flex-col items-center">
+              <div className="flex flex-col items-center text-center p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-gray-100 relative z-10">
                 <div className="relative mb-4">
                   {step.icon}
                   <div className="absolute -top-2 -right-2 bg-nomade-orange text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">
@@ -48,9 +48,10 @@ const HowItWorks: React.FC = () => {
               </div>
               
               {idx < steps.length - 1 && (
-                <div className="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2 z-10">
-                  <div className="w-8 h-0.5 bg-gradient-to-r from-nomade-turquoise to-nomade-orange"></div>
-                  <div className="w-2 h-2 bg-nomade-orange rounded-full absolute -right-1 -top-0.75"></div>
+                <div className="hidden md:block absolute top-1/2 left-full transform -translate-y-1/2 z-0" style={{ width: '2rem', marginLeft: '1rem', marginRight: '1rem' }}>
+                  <div className="w-8 h-0.5 bg-gradient-to-r from-nomade-turquoise to-nomade-orange relative">
+                    <div className="absolute -right-1 -top-1 w-2 h-2 bg-nomade-orange rounded-full"></div>
+                  </div>
                 </div>
               )}
             </div>
