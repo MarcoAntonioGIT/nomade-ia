@@ -36,19 +36,21 @@ const HowItWorks: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto relative">
           {steps.map((step, idx) => (
             <div key={idx} className="relative flex flex-col items-center">
-              <div className="flex flex-col items-center text-center p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-gray-100 relative z-10">
-                <div className="relative mb-4">
-                  {step.icon}
-                  <div className="absolute -top-2 -right-2 bg-nomade-orange text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">
-                    {idx + 1}
+              <div className="flex flex-col items-center text-center p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-gray-100 relative z-10 h-full min-h-[280px] justify-between">
+                <div className="flex-1 flex flex-col items-center justify-start">
+                  <div className="relative mb-4">
+                    {step.icon}
+                    <div className="absolute -top-2 -right-2 bg-nomade-orange text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">
+                      {idx + 1}
+                    </div>
                   </div>
+                  <h3 className="text-xl font-bold mb-3 text-nomade-navy">{step.title}</h3>
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-nomade-navy">{step.title}</h3>
                 <p className="text-gray-600 leading-relaxed">{step.description}</p>
               </div>
               
               {idx < steps.length - 1 && (
-                <div className="hidden md:block absolute top-1/2 left-full transform -translate-y-1/2 z-0" style={{ width: '2rem', marginLeft: '1rem', marginRight: '1rem' }}>
+                <div className="hidden md:block absolute top-1/2 left-full transform -translate-y-1/2 translate-x-4 z-20">
                   <div className="w-8 h-0.5 bg-gradient-to-r from-nomade-turquoise to-nomade-orange relative">
                     <div className="absolute -right-1 -top-1 w-2 h-2 bg-nomade-orange rounded-full"></div>
                   </div>
