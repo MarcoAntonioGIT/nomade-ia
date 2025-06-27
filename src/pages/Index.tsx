@@ -7,7 +7,6 @@ import PromotionalCampaigns from '@/components/PromotionalCampaigns';
 import Chatbot from '@/components/Chatbot';
 import HowItWorks from '@/components/home/HowItWorks';
 import CustomerTestimonials from '@/components/home/CustomerTestimonials';
-import IdealDatesCalendar from '@/components/home/IdealDatesCalendar';
 import NewsletterSection from '@/components/home/NewsletterSection';
 import PromotionalPopup from '@/components/PromotionalPopup';
 
@@ -33,9 +32,6 @@ const Index: React.FC = () => {
       
       {/* Campanhas promocionais */}
       <PromotionalCampaigns />
-      
-      {/* Calendário de datas ideais */}
-      <IdealDatesCalendar />
       
       {/* Depoimentos de clientes */}
       <CustomerTestimonials />

@@ -1,6 +1,5 @@
 
 import React, { useRef, useState } from 'react';
-import { Plus, Mic } from 'lucide-react';
 
 interface Message {
   sender: 'user' | 'bot';
@@ -99,14 +98,6 @@ const Chatbot: React.FC = () => {
       <form onSubmit={sendMessage} className="max-w-3xl mx-auto">
         <div className="relative bg-white border border-gray-200 rounded-3xl shadow-sm hover:shadow-md transition-shadow">
           <div className="flex items-center px-6 py-4">
-            <button
-              type="button"
-              className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
-              aria-label="Adicionar"
-            >
-              <Plus size={20} />
-            </button>
-            
             <input
               type="text"
               className="flex-1 px-4 py-2 text-lg text-gray-700 placeholder-gray-400 bg-transparent border-none outline-none"
@@ -117,27 +108,17 @@ const Chatbot: React.FC = () => {
               autoFocus
             />
             
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
-                aria-label="Microfone"
-              >
-                <Mic size={20} />
-              </button>
-              
-              <button
-                type="submit"
-                className="bg-gray-200 hover:bg-gray-300 text-gray-600 rounded-full p-3 transition-colors disabled:opacity-50 flex items-center justify-center"
-                disabled={loading || !input.trim()}
-                aria-label="Enviar"
-              >
-                <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="22" y1="2" x2="11" y2="13"/>
-                  <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-                </svg>
-              </button>
-            </div>
+            <button
+              type="submit"
+              className="bg-gray-200 hover:bg-gray-300 text-gray-600 rounded-full p-3 transition-colors disabled:opacity-50 flex items-center justify-center ml-4"
+              disabled={loading || !input.trim()}
+              aria-label="Enviar"
+            >
+              <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"/>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+            </button>
           </div>
         </div>
       </form>

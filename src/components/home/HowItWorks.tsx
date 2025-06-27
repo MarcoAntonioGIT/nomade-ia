@@ -22,7 +22,7 @@ const steps = [
 
 const HowItWorks: React.FC = () => {
   return (
-    <section className="w-full py-16 bg-gradient-to-br from-gray-50 to-white">
+    <section className="w-full py-16 bg-white">
       <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-nomade-navy">
