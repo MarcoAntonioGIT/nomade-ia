@@ -1,5 +1,6 @@
 
 import React, { useRef, useState } from 'react';
+import { Send } from 'lucide-react';
 
 interface Message {
   sender: 'user' | 'bot';
@@ -110,14 +111,11 @@ const Chatbot: React.FC = () => {
             
             <button
               type="submit"
-              className="bg-gray-200 hover:bg-gray-300 text-gray-600 rounded-full p-3 transition-colors disabled:opacity-50 flex items-center justify-center ml-4"
+              className="bg-gray-200 hover:bg-gray-300 text-gray-600 rounded-full p-3 transition-colors disabled:opacity-50 flex items-center justify-center ml-4 w-10 h-10"
               disabled={loading || !input.trim()}
               aria-label="Enviar"
             >
-              <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="22" y1="2" x2="11" y2="13"/>
-                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-              </svg>
+              <Send className="w-4 h-4" />
             </button>
           </div>
         </div>

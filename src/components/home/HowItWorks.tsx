@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { MessageCircle, Package, CreditCard } from 'lucide-react';
+import { MessageCircle, Plane, CreditCard } from 'lucide-react';
 
 const steps = [
   {
@@ -9,7 +9,7 @@ const steps = [
     description: 'Conte seus sonhos de viagem para nossa inteligência artificial personalizada.',
   },
   {
-    icon: <Package className="w-12 h-12 text-nomade-turquoise mb-4" />,
+    icon: <Plane className="w-12 h-12 text-nomade-turquoise mb-4" />,
     title: 'Escolha seu pacote',
     description: 'Receba opções de pacotes personalizados com as melhores ofertas do mercado.',
   },
@@ -33,7 +33,7 @@ const HowItWorks: React.FC = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto relative">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-16 max-w-5xl mx-auto relative">
           {steps.map((step, idx) => (
             <div key={idx} className="relative flex flex-col items-center">
               <div className="flex flex-col items-center text-center p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-gray-100 relative z-10 h-full min-h-[280px] justify-between">
@@ -50,8 +50,8 @@ const HowItWorks: React.FC = () => {
               </div>
               
               {idx < steps.length - 1 && (
-                <div className="hidden md:block absolute top-1/2 left-full transform -translate-y-1/2 translate-x-4 z-20">
-                  <div className="w-8 h-0.5 bg-gradient-to-r from-nomade-turquoise to-nomade-orange relative">
+                <div className="hidden md:block absolute top-1/2 left-full transform -translate-y-1/2 translate-x-8 z-20">
+                  <div className="w-12 h-0.5 bg-gradient-to-r from-nomade-turquoise to-nomade-orange relative">
                     <div className="absolute -right-1 -top-1 w-2 h-2 bg-nomade-orange rounded-full"></div>
                   </div>
                 </div>

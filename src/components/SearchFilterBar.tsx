@@ -136,10 +136,10 @@ const SearchFilterBar: React.FC = () => {
             {/* Datas Agrupadas */}
             <div className="flex bg-white rounded-xl shadow-sm overflow-hidden h-14">
               {/* Data de Ida */}
-              <div className="flex items-center px-3 py-2 min-w-[110px]">
+              <div className="flex items-center px-3 py-2 min-w-[120px]">
                 <span className="mr-2 text-gray-400"><Calendar className="w-4 h-4" /></span>
                 <div className="flex-1">
-                  <label className="block text-xs font-medium text-gray-500 mb-0.5">DATAS</label>
+                  <label className="block text-xs font-medium text-gray-500 mb-0.5">IDA</label>
                   <input
                     type="date"
                     className="w-full text-gray-900 border-none outline-none font-medium text-xs bg-transparent"
@@ -151,9 +151,9 @@ const SearchFilterBar: React.FC = () => {
               </div>
 
               {/* Data de Volta */}
-              <div className={`flex items-center px-3 py-2 min-w-[110px] ${tipoViagem === 'soIda' ? 'bg-gray-100' : ''}`}>
+              <div className={`flex items-center px-3 py-2 min-w-[120px] ${tipoViagem === 'soIda' ? 'bg-gray-100' : ''}`}>
                 <div className="flex-1">
-                  <label className="block text-xs font-medium text-gray-500 mb-0.5">3 DIAS</label>
+                  <label className="block text-xs font-medium text-gray-500 mb-0.5">VOLTA</label>
                   <input
                     type="date"
                     className={`w-full border-none outline-none font-medium text-xs bg-transparent ${
@@ -169,23 +169,15 @@ const SearchFilterBar: React.FC = () => {
             </div>
 
             {/* Passageiros e Classe */}
-            <div className="flex items-center bg-white rounded-xl px-3 py-2 shadow-sm min-w-[160px] h-14">
-              <span className="mr-2 text-gray-400"><Users className="w-4 h-4" /></span>
+            <div className="flex items-center bg-white rounded-xl px-4 py-3 shadow-sm min-w-[180px] h-14">
+              <Users className="w-4 h-4 text-gray-400 mr-3 flex-shrink-0" />
               <div className="flex-1">
                 <label className="block text-xs font-medium text-gray-500 mb-0.5">PASSAGEIROS E CLASSE</label>
                 <div className="flex items-center gap-2">
-                  <input
-                    type="number"
-                    min={1}
-                    max={10}
-                    className="w-4 text-gray-900 border-none outline-none font-medium text-xs bg-transparent"
-                    value={passageiros}
-                    onChange={e => setPassageiros(Number(e.target.value))}
-                    required
-                  />
-                  <span className="text-xs text-gray-600">pessoa, </span>
+                  <span className="text-sm text-gray-900 font-medium">{passageiros}</span>
+                  <span className="text-xs text-gray-600">pessoa,</span>
                   <select
-                    className="text-gray-900 border-none outline-none font-medium text-xs bg-transparent"
+                    className="text-gray-900 border-none outline-none font-medium text-xs bg-transparent flex-1"
                     value={classe}
                     onChange={e => setClasse(e.target.value)}
                   >
