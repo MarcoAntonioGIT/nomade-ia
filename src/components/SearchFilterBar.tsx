@@ -40,7 +40,7 @@ const SearchFilterBar: React.FC = () => {
   };
 
   return (
-    <div className="bg-nomade-navy rounded-3xl shadow-2xl max-w-5xl mx-auto mt-8 mb-12 px-8 py-8">
+    <div className="bg-nomade-navy rounded-3xl shadow-2xl max-w-6xl mx-auto mt-8 mb-12 px-8 py-8">
       {/* Tabs e Voo+Hotel */}
       <div className="flex items-center gap-4 mb-6">
         <div className="flex gap-2">
@@ -83,10 +83,11 @@ const SearchFilterBar: React.FC = () => {
 
       {/* Form principal */}
       <form onSubmit={handleSubmit}>
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col lg:flex-row items-center gap-4">
+        <div className="flex flex-col gap-6">
+          {/* Primeira linha com campos principais */}
+          <div className="flex flex-col xl:flex-row items-stretch gap-4">
             {/* Origem */}
-            <div className="flex-1 flex items-center bg-white rounded-xl px-4 py-3 min-w-[180px] shadow-sm">
+            <div className="flex-1 flex items-center bg-white rounded-xl px-4 py-4 min-w-[200px] shadow-sm">
               <span className="mr-3 text-gray-400"><Plane className="w-5 h-5" /></span>
               <div className="flex-1">
                 <label className="block text-xs font-medium text-gray-500 mb-1">Origem</label>
@@ -110,7 +111,7 @@ const SearchFilterBar: React.FC = () => {
             </div>
 
             {/* Destino */}
-            <div className="flex-1 flex items-center bg-white rounded-xl px-4 py-3 min-w-[180px] shadow-sm">
+            <div className="flex-1 flex items-center bg-white rounded-xl px-4 py-4 min-w-[200px] shadow-sm">
               <span className="mr-3 text-gray-400"><Plane className="w-5 h-5 rotate-90" /></span>
               <div className="flex-1">
                 <label className="block text-xs font-medium text-gray-500 mb-1">Destino</label>
@@ -126,7 +127,7 @@ const SearchFilterBar: React.FC = () => {
             </div>
 
             {/* Data de Ida */}
-            <div className="flex items-center bg-white rounded-xl px-4 py-3 min-w-[160px] shadow-sm">
+            <div className="flex items-center bg-white rounded-xl px-4 py-4 min-w-[160px] shadow-sm">
               <span className="mr-3 text-gray-400"><Calendar className="w-5 h-5" /></span>
               <div className="flex-1">
                 <label className="block text-xs font-medium text-gray-500 mb-1">Ida</label>
@@ -142,7 +143,7 @@ const SearchFilterBar: React.FC = () => {
 
             {/* Data de Volta */}
             {tipoViagem !== 'soIda' && (
-              <div className="flex items-center bg-white rounded-xl px-4 py-3 min-w-[160px] shadow-sm">
+              <div className="flex items-center bg-white rounded-xl px-4 py-4 min-w-[160px] shadow-sm">
                 <span className="mr-3 text-gray-400"><Calendar className="w-5 h-5" /></span>
                 <div className="flex-1">
                   <label className="block text-xs font-medium text-gray-500 mb-1">Volta</label>
@@ -158,7 +159,7 @@ const SearchFilterBar: React.FC = () => {
             )}
 
             {/* Passageiros */}
-            <div className="flex items-center bg-white rounded-xl px-4 py-3 min-w-[120px] shadow-sm">
+            <div className="flex items-center bg-white rounded-xl px-4 py-4 min-w-[140px] shadow-sm">
               <span className="mr-3 text-gray-400"><Users className="w-5 h-5" /></span>
               <div className="flex-1">
                 <label className="block text-xs font-medium text-gray-500 mb-1">Passageiros</label>
@@ -175,7 +176,7 @@ const SearchFilterBar: React.FC = () => {
             </div>
 
             {/* Classe */}
-            <div className="flex items-center bg-white rounded-xl px-4 py-3 min-w-[140px] shadow-sm">
+            <div className="flex items-center bg-white rounded-xl px-4 py-4 min-w-[160px] shadow-sm">
               <div className="flex-1">
                 <label className="block text-xs font-medium text-gray-500 mb-1">Classe</label>
                 <select
@@ -191,19 +192,21 @@ const SearchFilterBar: React.FC = () => {
               </div>
             </div>
 
-            {/* Botão de busca */}
-            <Button
-              type="submit"
-              className="bg-nomade-orange hover:bg-nomade-orange/90 text-white px-8 py-6 rounded-xl font-bold flex items-center gap-3 min-w-[140px] text-lg shadow-lg hover:shadow-xl transition-all"
-              disabled={loading}
-            >
-              <Search className="w-5 h-5" />
-              {loading ? 'Buscando...' : 'Buscar'}
-            </Button>
+            {/* Botão de busca integrado */}
+            <div className="flex items-center">
+              <Button
+                type="submit"
+                className="bg-nomade-orange hover:bg-nomade-orange/90 text-white px-8 py-6 rounded-xl font-bold flex items-center justify-center gap-3 min-w-[160px] text-lg shadow-lg hover:shadow-xl transition-all h-full"
+                disabled={loading}
+              >
+                <Search className="w-6 h-6" />
+                {loading ? 'Buscando...' : 'Buscar'}
+              </Button>
+            </div>
           </div>
 
-          {/* Checkbox */}
-          <div className="flex items-center mt-4">
+          {/* Checkbox na parte inferior */}
+          <div className="flex items-center justify-center">
             <input
               type="checkbox"
               checked={dataBarata}
