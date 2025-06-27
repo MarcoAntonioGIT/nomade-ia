@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Search, Plane, Hotel, ArrowLeftRight, Calendar, Users } from 'lucide-react';
@@ -40,175 +39,155 @@ const SearchFilterBar: React.FC = () => {
   };
 
   return (
-    <div className="bg-gradient-to-r from-blue-600 to-blue-700 py-8">
-      <div className="container">
-        <div className="mb-6">
-          <h2 className="text-white text-2xl font-bold mb-2">Passagens aéreas</h2>
-        </div>
-        
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Tipo de viagem e voo+hotel */}
-          <div className="flex flex-wrap gap-4 items-center">
-            <div className="flex gap-2">
-              {tiposViagem.map(tab => (
-                <button
-                  key={tab.value}
-                  type="button"
-                  className={`px-6 py-2 rounded-full font-medium text-sm transition-colors ${
-                    tipoViagem === tab.value 
-                      ? 'bg-white text-blue-700' 
-                      : 'text-white border border-white/30 hover:bg-white/10'
-                  }`}
-                  onClick={() => setTipoViagem(tab.value)}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-            
-            <div className="h-6 w-px bg-white/30" />
-            
+    <div className="bg-nomade-navy rounded-2xl shadow-lg max-w-3xl mx-auto mt-6 mb-8 px-4 py-4">
+      {/* Tabs e Voo+Hotel */}
+      <div className="flex items-center gap-2 mb-3">
+        <div className="flex gap-1">
+          {tiposViagem.map(tab => (
             <button
+              key={tab.value}
               type="button"
-              className={`flex items-center gap-2 px-6 py-2 rounded-full font-medium text-sm transition-colors ${
-                vooHotel 
-                  ? 'bg-green-100 text-green-700 border border-green-200' 
+              className={`px-3 py-1 rounded-full font-medium text-xs transition-colors ${
+                tipoViagem === tab.value 
+                  ? 'bg-white text-nomade-navy' 
                   : 'text-white border border-white/30 hover:bg-white/10'
               }`}
-              onClick={() => setVooHotel(v => !v)}
+              onClick={() => setTipoViagem(tab.value)}
             >
-              <Plane className="w-4 h-4" />
-              <span>+</span>
-              <Hotel className="w-4 h-4" />
-              <span>Hospedagem</span>
-              {vooHotel && (
-                <span className="ml-2 text-xs bg-green-500 text-white px-2 py-0.5 rounded-full">
-                  Até 30% mais barato
-                </span>
-              )}
+              {tab.label}
             </button>
-          </div>
-
-          {/* Campos de busca */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-            {/* Origem e Destino */}
-            <div className="lg:col-span-2 xl:col-span-2 bg-white rounded-lg p-4 flex items-center gap-2">
-              <div className="flex-1">
-                <label className="block text-xs text-gray-500 mb-1 uppercase font-medium">ORIGEM</label>
-                <input
-                  type="text"
-                  placeholder="Caxias do Sul, Rio..."
-                  className="w-full text-gray-900 placeholder-gray-400 border-none outline-none font-medium"
-                  value={origem}
-                  onChange={e => setOrigem(e.target.value)}
-                  required
-                />
-              </div>
-              
+          ))}
+        </div>
+        <div className="h-4 w-px bg-white/30 mx-1" />
+        <button
+          type="button"
+          className={`flex items-center gap-1 px-3 py-1 rounded-full font-medium text-xs transition-colors ${
+            vooHotel 
+              ? 'bg-green-100 text-green-700 border border-green-200' 
+              : 'text-white border border-white/30 hover:bg-white/10'
+          }`}
+          onClick={() => setVooHotel(v => !v)}
+        >
+          <Plane className="w-3 h-3" />
+          <span>+</span>
+          <Hotel className="w-3 h-3" />
+          <span>Hospedagem</span>
+          {vooHotel && (
+            <span className="ml-1 text-xs bg-green-500 text-white px-1 py-0.5 rounded-full">
+              Até 30% mais barato
+            </span>
+          )}
+        </button>
+      </div>
+      {/* Form principal */}
+      <form onSubmit={handleSubmit}>
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-col md:flex-row items-center gap-2">
+            {/* Origem */}
+            <div className="flex-1 flex items-center bg-white rounded-lg px-2 py-1 min-w-[120px]">
+              <span className="mr-2 text-gray-400"><Plane className="w-4 h-4" /></span>
+              <input
+                type="text"
+                placeholder="Origem"
+                className="w-full text-gray-900 placeholder-gray-400 border-none outline-none font-medium text-sm bg-transparent"
+                value={origem}
+                onChange={e => setOrigem(e.target.value)}
+                required
+              />
               <button 
                 type="button" 
-                className="p-2 text-gray-400 hover:text-blue-600 transition-colors"
+                className="ml-1 p-1 text-gray-400 hover:text-blue-600 transition-colors"
                 onClick={() => { const o = origem; setOrigem(destino); setDestino(o); }}
+                tabIndex={-1}
               >
                 <ArrowLeftRight className="w-4 h-4" />
               </button>
-              
-              <div className="flex-1">
-                <label className="block text-xs text-gray-500 mb-1 uppercase font-medium">DESTINO</label>
-                <input
-                  type="text"
-                  placeholder="Insira sua cidade ..."
-                  className="w-full text-gray-900 placeholder-gray-400 border-none outline-none font-medium"
-                  value={destino}
-                  onChange={e => setDestino(e.target.value)}
-                  required
-                />
-              </div>
             </div>
-
-            {/* Datas */}
-            <div className="bg-white rounded-lg p-4">
-              <label className="block text-xs text-gray-500 mb-1 uppercase font-medium">DATAS</label>
-              <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-gray-400" />
-                <input
-                  type="date"
-                  className="flex-1 text-gray-900 border-none outline-none font-medium"
-                  value={dataIda}
-                  onChange={e => setDataIda(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="text-xs text-gray-400 mt-1">Ida</div>
-            </div>
-
-            <div className="bg-white rounded-lg p-4">
-              <label className="block text-xs text-gray-500 mb-1 uppercase font-medium">&nbsp;</label>
-              <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-gray-400" />
-                <input
-                  type="date"
-                  className="flex-1 text-gray-900 border-none outline-none font-medium"
-                  value={dataVolta}
-                  onChange={e => setDataVolta(e.target.value)}
-                  disabled={tipoViagem === 'soIda'}
-                  required={tipoViagem !== 'soIda'}
-                />
-              </div>
-              <div className="text-xs text-gray-400 mt-1">Volta</div>
-            </div>
-
-            {/* Passageiros */}
-            <div className="bg-white rounded-lg p-4">
-              <label className="block text-xs text-gray-500 mb-1 uppercase font-medium">PASSAGEIROS E CLASSE</label>
-              <div className="flex items-center gap-2">
-                <Users className="w-4 h-4 text-gray-400" />
-                <input
-                  type="number"
-                  min={1}
-                  max={10}
-                  className="w-8 text-gray-900 border-none outline-none font-medium"
-                  value={passageiros}
-                  onChange={e => setPassageiros(Number(e.target.value))}
-                  required
-                />
-                <select
-                  className="flex-1 text-gray-900 border-none outline-none font-medium"
-                  value={classe}
-                  onChange={e => setClasse(e.target.value)}
-                >
-                  <option value="Econômica">Econômica</option>
-                  <option value="Executiva">Executiva</option>
-                  <option value="Primeira">Primeira</option>
-                </select>
-              </div>
-              <div className="text-xs text-gray-400 mt-1">1 pessoa, Econô...</div>
-            </div>
-          </div>
-
-          {/* Botão de buscar e checkbox */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <label className="flex items-center gap-2 text-white font-medium cursor-pointer">
+            {/* Separador */}
+            <div className="hidden md:block h-8 w-px bg-gray-200 mx-1" />
+            {/* Destino */}
+            <div className="flex-1 flex items-center bg-white rounded-lg px-2 py-1 min-w-[120px] mt-2 md:mt-0">
+              <span className="mr-2 text-gray-400"><Plane className="w-4 h-4 rotate-90" /></span>
               <input
-                type="checkbox"
-                checked={dataBarata}
-                onChange={e => setDataBarata(e.target.checked)}
-                className="rounded border-white/30 bg-transparent text-blue-500 focus:ring-blue-500 focus:ring-offset-0"
+                type="text"
+                placeholder="Destino"
+                className="w-full text-gray-900 placeholder-gray-400 border-none outline-none font-medium text-sm bg-transparent"
+                value={destino}
+                onChange={e => setDestino(e.target.value)}
+                required
               />
-              Buscar pela data mais barata
-            </label>
-            
+            </div>
+            {/* Separador */}
+            <div className="hidden md:block h-8 w-px bg-gray-200 mx-1" />
+            {/* Datas */}
+            <div className="flex items-center bg-white rounded-lg px-2 py-1 min-w-[120px] mt-2 md:mt-0">
+              <span className="mr-2 text-gray-400"><Calendar className="w-4 h-4" /></span>
+              <input
+                type="date"
+                className="text-gray-900 border-none outline-none font-medium text-sm bg-transparent w-[90px]"
+                value={dataIda}
+                onChange={e => setDataIda(e.target.value)}
+                required
+              />
+              <span className="mx-1 text-gray-400">-</span>
+              <input
+                type="date"
+                className="text-gray-900 border-none outline-none font-medium text-sm bg-transparent w-[90px]"
+                value={dataVolta}
+                onChange={e => setDataVolta(e.target.value)}
+                disabled={tipoViagem === 'soIda'}
+                required={tipoViagem !== 'soIda'}
+              />
+            </div>
+            {/* Separador */}
+            <div className="hidden md:block h-8 w-px bg-gray-200 mx-1" />
+            {/* Passageiros e classe */}
+            <div className="flex items-center bg-white rounded-lg px-2 py-1 min-w-[120px] mt-2 md:mt-0">
+              <span className="mr-2 text-gray-400"><Users className="w-4 h-4" /></span>
+              <input
+                type="number"
+                min={1}
+                max={10}
+                className="w-8 text-gray-900 border-none outline-none font-medium text-sm bg-transparent"
+                value={passageiros}
+                onChange={e => setPassageiros(Number(e.target.value))}
+                required
+              />
+              <select
+                className="ml-2 flex-1 text-gray-900 border-none outline-none font-medium text-sm bg-transparent"
+                value={classe}
+                onChange={e => setClasse(e.target.value)}
+              >
+                <option value="Econômica">Econômica</option>
+                <option value="Executiva">Executiva</option>
+                <option value="Primeira">Primeira</option>
+              </select>
+            </div>
+            {/* Botão de busca */}
             <Button
               type="submit"
-              className="bg-nomade-orange hover:bg-nomade-orange/90 text-white px-8 py-3 rounded-lg font-bold flex items-center gap-2 min-w-[140px]"
+              className="ml-0 md:ml-2 bg-nomade-orange hover:bg-nomade-orange/90 text-white px-6 py-2 rounded-lg font-bold flex items-center gap-2 min-w-[100px] text-base shadow-md"
               disabled={loading}
             >
               <Search className="w-4 h-4" />
               Buscar
             </Button>
           </div>
-        </form>
-      </div>
+          {/* Checkbox */}
+          <div className="flex items-center mt-2">
+            <input
+              type="checkbox"
+              checked={dataBarata}
+              onChange={e => setDataBarata(e.target.checked)}
+              className="rounded border-white/30 bg-transparent text-blue-500 focus:ring-blue-500 focus:ring-offset-0 mr-2"
+              id="dataBarata"
+            />
+            <label htmlFor="dataBarata" className="text-white font-medium text-xs cursor-pointer">
+              Buscar pela data mais barata
+            </label>
+          </div>
+        </div>
+      </form>
     </div>
   );
 };
