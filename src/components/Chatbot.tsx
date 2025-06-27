@@ -59,6 +59,10 @@ const Chatbot: React.FC = () => {
           <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
             Onde devemos começar?
           </h1>
+          <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+            Nossa IA está pronta para ajudar você a planejar a viagem dos seus sonhos. 
+            Conte-nos seus destinos desejados, orçamento, datas ou qualquer preferência especial.
+          </p>
         </div>
         
         <form onSubmit={sendMessage} className="max-w-3xl mx-auto">
