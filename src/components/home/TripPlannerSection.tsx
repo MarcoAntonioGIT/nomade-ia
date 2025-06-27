@@ -1,7 +1,27 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/contexts/AuthContext';
 
-const TripPlannerSection: React.FC = () => {
+interface TripPlannerSectionProps {
+  onTripGenerated?: () => void;
+  onAuthRequired?: () => void;
+}
+
+const TripPlannerSection: React.FC<TripPlannerSectionProps> = ({ 
+  onTripGenerated, 
+  onAuthRequired 
+}) => {
+  const { user } = useAuth();
+
+  const handleButtonClick = () => {
+    if (!user && onAuthRequired) {
+      onAuthRequired();
+    } else if (onTripGenerated) {
+      onTripGenerated();
+    }
+  };
+
   return (
     <section className="relative h-[480px] flex items-center bg-cover bg-center" style={{ backgroundImage: "url('/public/banner-van.jpg'), url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80')" }}>
       <div className="absolute inset-0 bg-black/60" />
@@ -16,7 +36,7 @@ const TripPlannerSection: React.FC = () => {
           <Button 
             size="lg" 
             className="bg-nomade-orange hover:bg-nomade-orange/90 text-white px-8 text-lg font-semibold shadow-lg"
-            onClick={() => {}}
+            onClick={handleButtonClick}
           >
             Fale com a IA
           </Button>
