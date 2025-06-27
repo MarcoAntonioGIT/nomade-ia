@@ -26,7 +26,7 @@ const NewsletterSection: React.FC = () => {
 
   if (subscribed) {
     return (
-      <section className="py-16 bg-gradient-to-br from-emerald-500 to-teal-600">
+      <section className="py-16 bg-gradient-to-br from-nomade-navy via-indigo-800 to-emerald-600">
         <div className="container">
           <Card className="max-w-2xl mx-auto border-0 shadow-2xl">
             <CardContent className="text-center p-12">
@@ -52,7 +52,7 @@ const NewsletterSection: React.FC = () => {
   }
 
   return (
-    <section className="py-16 bg-gradient-to-br from-nomade-navy via-indigo-900 to-nomade-turquoise">
+    <section className="py-16 bg-gradient-to-br from-nomade-navy via-indigo-800 to-nomade-turquoise">
       <div className="container">
         <Card className="max-w-4xl mx-auto border-0 shadow-2xl overflow-hidden">
           <div className="grid md:grid-cols-2">

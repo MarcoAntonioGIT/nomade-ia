@@ -23,6 +23,11 @@ const Index: React.FC = () => {
       {/* Filtro de busca */}
       <SearchFilterBar />
       
+      {/* Chatbot central na home */}
+      <div className="max-w-3xl mx-auto w-full my-12">
+        <Chatbot />
+      </div>
+      
       {/* Seção Como Funciona */}
       <HowItWorks />
       
@@ -31,11 +36,6 @@ const Index: React.FC = () => {
       
       {/* Calendário de datas ideais */}
       <IdealDatesCalendar />
-      
-      {/* Chatbot central na home */}
-      <div className="max-w-3xl mx-auto w-full my-12">
-        <Chatbot />
-      </div>
       
       {/* Depoimentos de clientes */}
       <CustomerTestimonials />
