@@ -2,6 +2,9 @@ import React from 'react';
 import PageLayout from '@/components/layout/PageLayout';
 import TripPlannerSection from '@/components/home/TripPlannerSection';
 import SignupDialog from '@/components/SignupDialog';
+import SearchFilterBar from '@/components/SearchFilterBar';
+import PromotionalCampaigns from '@/components/PromotionalCampaigns';
+import Chatbot from '@/components/Chatbot';
 
 const Index: React.FC = () => {
   const [isSignupOpen, setIsSignupOpen] = React.useState(false);
@@ -17,12 +20,16 @@ const Index: React.FC = () => {
 
   return (
     <PageLayout>
-      {/* The Trip Planner Section is the only component on the home page */}
-      <TripPlannerSection 
-        onTripGenerated={handleTripGenerated}
-        onAuthRequired={handleAuthRequired}
-      />
-      
+      {/* Filtro de busca */}
+      <SearchFilterBar />
+      {/* Banner e hero do planner */}
+      <TripPlannerSection />
+      {/* Chatbot central na home */}
+      <div className="max-w-3xl mx-auto w-full my-12">
+        <Chatbot />
+      </div>
+      {/* Campanhas promocionais */}
+      <PromotionalCampaigns />
       {/* Signup Dialog to handle authentication requests */}
       <SignupDialog 
         isOpen={isSignupOpen} 
