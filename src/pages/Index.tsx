@@ -1,6 +1,6 @@
+
 import React from 'react';
 import PageLayout from '@/components/layout/PageLayout';
-import TripPlannerSection from '@/components/home/TripPlannerSection';
 import SignupDialog from '@/components/SignupDialog';
 import SearchFilterBar from '@/components/SearchFilterBar';
 import PromotionalCampaigns from '@/components/PromotionalCampaigns';
@@ -22,14 +22,15 @@ const Index: React.FC = () => {
     <PageLayout>
       {/* Filtro de busca */}
       <SearchFilterBar />
-      {/* Banner e hero do planner */}
-      <TripPlannerSection />
+      
+      {/* Campanhas promocionais - movidas para cima do chatbot */}
+      <PromotionalCampaigns />
+      
       {/* Chatbot central na home */}
       <div className="max-w-3xl mx-auto w-full my-12">
         <Chatbot />
       </div>
-      {/* Campanhas promocionais */}
-      <PromotionalCampaigns />
+      
       {/* Signup Dialog to handle authentication requests */}
       <SignupDialog 
         isOpen={isSignupOpen} 

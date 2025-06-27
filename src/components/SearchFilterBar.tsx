@@ -1,5 +1,7 @@
 
 import React, { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Search, Plane, Hotel, ArrowLeftRight, Calendar, Users } from 'lucide-react';
 
 const tiposViagem = [
   { label: 'Ida e Volta', value: 'idaEVolta' },
@@ -38,124 +40,172 @@ const SearchFilterBar: React.FC = () => {
   };
 
   return (
-    <div className="w-full flex justify-center bg-white py-6">
-      <div className="w-full max-w-5xl px-4">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          <div className="flex flex-wrap gap-2 mb-2 items-center justify-center">
-            <div className="flex gap-2 bg-[#053757] rounded-full p-1">
+    <div className="bg-gradient-to-r from-blue-600 to-blue-700 py-8">
+      <div className="container">
+        <div className="mb-6">
+          <h2 className="text-white text-2xl font-bold mb-2">Passagens aéreas</h2>
+        </div>
+        
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Tipo de viagem e voo+hotel */}
+          <div className="flex flex-wrap gap-4 items-center">
+            <div className="flex gap-2">
               {tiposViagem.map(tab => (
                 <button
                   key={tab.value}
                   type="button"
-                  className={`px-4 py-2 rounded-full font-semibold text-sm transition-colors ${tipoViagem === tab.value ? 'bg-white text-[#053757]' : 'text-white bg-[#053757] hover:bg-[#064468]'}`}
+                  className={`px-6 py-2 rounded-full font-medium text-sm transition-colors ${
+                    tipoViagem === tab.value 
+                      ? 'bg-white text-blue-700' 
+                      : 'text-white border border-white/30 hover:bg-white/10'
+                  }`}
                   onClick={() => setTipoViagem(tab.value)}
                 >
                   {tab.label}
                 </button>
               ))}
             </div>
+            
+            <div className="h-6 w-px bg-white/30" />
+            
             <button
               type="button"
-              className={`flex items-center gap-2 px-4 py-2 rounded-full font-semibold text-sm border-2 transition-colors ml-2 ${vooHotel ? 'bg-green-100 border-green-500 text-green-700' : 'bg-[#053757] border-[#053757] text-white hover:bg-[#064468]'}`}
+              className={`flex items-center gap-2 px-6 py-2 rounded-full font-medium text-sm transition-colors ${
+                vooHotel 
+                  ? 'bg-green-100 text-green-700 border border-green-200' 
+                  : 'text-white border border-white/30 hover:bg-white/10'
+              }`}
               onClick={() => setVooHotel(v => !v)}
             >
-              <span role="img" aria-label="voo">✈️</span> + <span role="img" aria-label="hotel">🏨</span> Hospedagem
-              {vooHotel && <span className="ml-2 text-xs bg-green-500 text-white px-2 py-0.5 rounded-full">Até 30% mais barato</span>}
+              <Plane className="w-4 h-4" />
+              <span>+</span>
+              <Hotel className="w-4 h-4" />
+              <span>Hospedagem</span>
+              {vooHotel && (
+                <span className="ml-2 text-xs bg-green-500 text-white px-2 py-0.5 rounded-full">
+                  Até 30% mais barato
+                </span>
+              )}
             </button>
           </div>
-          <div className="flex justify-center">
-            <div className="bg-[#053757] rounded-xl p-4 shadow-lg max-w-4xl w-full">
-              <div className="flex flex-col lg:flex-row gap-2 items-center">
-                <div className="flex flex-col sm:flex-row gap-2 flex-1 w-full">
-                  <div className="flex items-center bg-white rounded-lg px-3 py-2 flex-1 min-w-[180px]">
-                    <span className="mr-2 text-gray-400">●</span>
-                    <input
-                      type="text"
-                      placeholder="Origem"
-                      className="bg-transparent border-none outline-none w-full font-medium text-sm"
-                      value={origem}
-                      onChange={e => setOrigem(e.target.value)}
-                      required
-                    />
-                    <button type="button" className="mx-2 text-gray-400 hover:text-[#053757]" tabIndex={-1} onClick={() => { const o = origem; setOrigem(destino); setDestino(o); }}>
-                      <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="3 16 3 21 8 21"/></svg>
-                    </button>
-                  </div>
-                  <div className="flex items-center bg-white rounded-lg px-3 py-2 flex-1 min-w-[180px]">
-                    <span className="mr-2 text-gray-400">📍</span>
-                    <input
-                      type="text"
-                      placeholder="Destino"
-                      className="bg-transparent border-none outline-none w-full font-medium text-sm"
-                      value={destino}
-                      onChange={e => setDestino(e.target.value)}
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col sm:flex-row gap-2 items-center w-full lg:w-auto">
-                  <div className="flex items-center bg-white rounded-lg px-3 py-2 min-w-[200px]">
-                    <span className="mr-2 text-gray-400">📅</span>
-                    <input
-                      type="date"
-                      className="bg-transparent border-none outline-none flex-1 text-sm"
-                      value={dataIda}
-                      onChange={e => setDataIda(e.target.value)}
-                      required
-                    />
-                    <span className="mx-2 text-gray-400">→</span>
-                    <input
-                      type="date"
-                      className="bg-transparent border-none outline-none flex-1 text-sm"
-                      value={dataVolta}
-                      onChange={e => setDataVolta(e.target.value)}
-                      disabled={tipoViagem === 'soIda'}
-                      required={tipoViagem !== 'soIda'}
-                    />
-                  </div>
-                  <div className="flex items-center bg-white rounded-lg px-3 py-2 min-w-[160px]">
-                    <span className="mr-2 text-gray-400">👤</span>
-                    <input
-                      type="number"
-                      min={1}
-                      max={10}
-                      className="bg-transparent border-none outline-none w-8 font-medium text-sm"
-                      value={passageiros}
-                      onChange={e => setPassageiros(Number(e.target.value))}
-                      required
-                    />
-                    <select
-                      className="bg-transparent border-none outline-none ml-2 font-medium flex-1 text-sm"
-                      value={classe}
-                      onChange={e => setClasse(e.target.value)}
-                    >
-                      <option value="Econômica">Econômica</option>
-                      <option value="Executiva">Executiva</option>
-                      <option value="Primeira">Primeira</option>
-                    </select>
-                  </div>
-                  <button
-                    type="submit"
-                    className="px-6 py-3 bg-[#ffa500] text-white rounded-lg font-bold text-sm flex items-center gap-2 hover:bg-[#ffb733] transition-colors shadow-lg min-w-[120px] justify-center"
-                    disabled={loading}
-                  >
-                    <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1"><circle cx="11" cy="11" r="10"/><path d="M21 21l-4.35-4.35"/></svg>
-                    Buscar
-                  </button>
-                </div>
+
+          {/* Campos de busca */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+            {/* Origem e Destino */}
+            <div className="lg:col-span-2 xl:col-span-2 bg-white rounded-lg p-4 flex items-center gap-2">
+              <div className="flex-1">
+                <label className="block text-xs text-gray-500 mb-1 uppercase font-medium">ORIGEM</label>
+                <input
+                  type="text"
+                  placeholder="Caxias do Sul, Rio..."
+                  className="w-full text-gray-900 placeholder-gray-400 border-none outline-none font-medium"
+                  value={origem}
+                  onChange={e => setOrigem(e.target.value)}
+                  required
+                />
+              </div>
+              
+              <button 
+                type="button" 
+                className="p-2 text-gray-400 hover:text-blue-600 transition-colors"
+                onClick={() => { const o = origem; setOrigem(destino); setDestino(o); }}
+              >
+                <ArrowLeftRight className="w-4 h-4" />
+              </button>
+              
+              <div className="flex-1">
+                <label className="block text-xs text-gray-500 mb-1 uppercase font-medium">DESTINO</label>
+                <input
+                  type="text"
+                  placeholder="Insira sua cidade ..."
+                  className="w-full text-gray-900 placeholder-gray-400 border-none outline-none font-medium"
+                  value={destino}
+                  onChange={e => setDestino(e.target.value)}
+                  required
+                />
               </div>
             </div>
+
+            {/* Datas */}
+            <div className="bg-white rounded-lg p-4">
+              <label className="block text-xs text-gray-500 mb-1 uppercase font-medium">DATAS</label>
+              <div className="flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-gray-400" />
+                <input
+                  type="date"
+                  className="flex-1 text-gray-900 border-none outline-none font-medium"
+                  value={dataIda}
+                  onChange={e => setDataIda(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="text-xs text-gray-400 mt-1">Ida</div>
+            </div>
+
+            <div className="bg-white rounded-lg p-4">
+              <label className="block text-xs text-gray-500 mb-1 uppercase font-medium">&nbsp;</label>
+              <div className="flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-gray-400" />
+                <input
+                  type="date"
+                  className="flex-1 text-gray-900 border-none outline-none font-medium"
+                  value={dataVolta}
+                  onChange={e => setDataVolta(e.target.value)}
+                  disabled={tipoViagem === 'soIda'}
+                  required={tipoViagem !== 'soIda'}
+                />
+              </div>
+              <div className="text-xs text-gray-400 mt-1">Volta</div>
+            </div>
+
+            {/* Passageiros */}
+            <div className="bg-white rounded-lg p-4">
+              <label className="block text-xs text-gray-500 mb-1 uppercase font-medium">PASSAGEIROS E CLASSE</label>
+              <div className="flex items-center gap-2">
+                <Users className="w-4 h-4 text-gray-400" />
+                <input
+                  type="number"
+                  min={1}
+                  max={10}
+                  className="w-8 text-gray-900 border-none outline-none font-medium"
+                  value={passageiros}
+                  onChange={e => setPassageiros(Number(e.target.value))}
+                  required
+                />
+                <select
+                  className="flex-1 text-gray-900 border-none outline-none font-medium"
+                  value={classe}
+                  onChange={e => setClasse(e.target.value)}
+                >
+                  <option value="Econômica">Econômica</option>
+                  <option value="Executiva">Executiva</option>
+                  <option value="Primeira">Primeira</option>
+                </select>
+              </div>
+              <div className="text-xs text-gray-400 mt-1">1 pessoa, Econô...</div>
+            </div>
           </div>
-          <div className="flex items-center justify-center gap-2 mt-2">
-            <label className="flex items-center gap-2 text-gray-600 font-medium cursor-pointer">
+
+          {/* Botão de buscar e checkbox */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <label className="flex items-center gap-2 text-white font-medium cursor-pointer">
               <input
                 type="checkbox"
                 checked={dataBarata}
                 onChange={e => setDataBarata(e.target.checked)}
-                className="form-checkbox h-4 w-4 text-[#ffa500] rounded focus:ring-0 border-gray-300"
+                className="rounded border-white/30 bg-transparent text-blue-500 focus:ring-blue-500 focus:ring-offset-0"
               />
               Buscar pela data mais barata
             </label>
+            
+            <Button
+              type="submit"
+              className="bg-nomade-orange hover:bg-nomade-orange/90 text-white px-8 py-3 rounded-lg font-bold flex items-center gap-2 min-w-[140px]"
+              disabled={loading}
+            >
+              <Search className="w-4 h-4" />
+              Buscar
+            </Button>
           </div>
         </form>
       </div>
