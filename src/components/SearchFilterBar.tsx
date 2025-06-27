@@ -89,7 +89,7 @@ const SearchFilterBar: React.FC = () => {
             {/* Origem e Destino Agrupados */}
             <div className="flex flex-1 bg-white rounded-xl shadow-sm overflow-hidden">
               {/* Origem */}
-              <div className="flex-1 flex items-center px-4 py-3 border-r border-gray-200">
+              <div className="flex-1 flex items-center px-4 py-3">
                 <span className="mr-3 text-gray-400"><Plane className="w-4 h-4" /></span>
                 <div className="flex-1">
                   <label className="block text-xs font-medium text-gray-500 mb-1">ORIGEM</label>
@@ -117,7 +117,7 @@ const SearchFilterBar: React.FC = () => {
               </div>
 
               {/* Destino */}
-              <div className="flex-1 flex items-center px-4 py-3 border-l border-gray-200">
+              <div className="flex-1 flex items-center px-4 py-3">
                 <span className="mr-3 text-gray-400"><Plane className="w-4 h-4 rotate-90" /></span>
                 <div className="flex-1">
                   <label className="block text-xs font-medium text-gray-500 mb-1">DESTINO</label>
@@ -136,7 +136,7 @@ const SearchFilterBar: React.FC = () => {
             {/* Datas Agrupadas */}
             <div className="flex bg-white rounded-xl shadow-sm overflow-hidden">
               {/* Data de Ida */}
-              <div className="flex items-center px-4 py-3 border-r border-gray-200 min-w-[120px]">
+              <div className="flex items-center px-4 py-3 min-w-[120px]">
                 <span className="mr-3 text-gray-400"><Calendar className="w-4 h-4" /></span>
                 <div className="flex-1">
                   <label className="block text-xs font-medium text-gray-500 mb-1">DATAS</label>
@@ -171,11 +171,11 @@ const SearchFilterBar: React.FC = () => {
               </div>
             </div>
 
-            {/* Passageiros e Classe */}
-            <div className="flex items-center bg-white rounded-xl px-4 py-3 shadow-sm min-w-[180px]">
+            {/* Passageiros */}
+            <div className="flex items-center bg-white rounded-xl px-4 py-3 shadow-sm min-w-[140px]">
               <span className="mr-3 text-gray-400"><Users className="w-4 h-4" /></span>
               <div className="flex-1">
-                <label className="block text-xs font-medium text-gray-500 mb-1">PASSAGEIROS E CLASSE</label>
+                <label className="block text-xs font-medium text-gray-500 mb-1">PASSAGEIROS</label>
                 <div className="flex items-center gap-2">
                   <input
                     type="number"
@@ -186,18 +186,25 @@ const SearchFilterBar: React.FC = () => {
                     onChange={e => setPassageiros(Number(e.target.value))}
                     required
                   />
-                  <span className="text-sm text-gray-600">pessoa,</span>
-                  <select
-                    className="text-gray-900 border-none outline-none font-medium text-sm bg-transparent"
-                    value={classe}
-                    onChange={e => setClasse(e.target.value)}
-                  >
-                    <option value="Econômica">Econô...</option>
-                    <option value="Premium Economy">Premium</option>
-                    <option value="Executiva">Executiva</option>
-                    <option value="Primeira Classe">Primeira</option>
-                  </select>
+                  <span className="text-sm text-gray-600">pessoa{passageiros > 1 ? 's' : ''}</span>
                 </div>
+              </div>
+            </div>
+
+            {/* Classe */}
+            <div className="flex items-center bg-white rounded-xl px-4 py-3 shadow-sm min-w-[120px]">
+              <div className="flex-1">
+                <label className="block text-xs font-medium text-gray-500 mb-1">CLASSE</label>
+                <select
+                  className="w-full text-gray-900 border-none outline-none font-medium text-sm bg-transparent"
+                  value={classe}
+                  onChange={e => setClasse(e.target.value)}
+                >
+                  <option value="Econômica">Econômica</option>
+                  <option value="Premium Economy">Premium</option>
+                  <option value="Executiva">Executiva</option>
+                  <option value="Primeira Classe">Primeira</option>
+                </select>
               </div>
             </div>
 

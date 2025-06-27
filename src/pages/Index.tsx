@@ -23,7 +23,7 @@ const Index: React.FC = () => {
       <SearchFilterBar />
       
       {/* Chatbot central na home */}
-      <div className="max-w-3xl mx-auto w-full my-12">
+      <div className="max-w-3xl mx-auto w-full mb-4">
         <Chatbot />
       </div>
       
