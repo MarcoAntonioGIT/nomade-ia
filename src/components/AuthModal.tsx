@@ -1,25 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { toast } from 'sonner';
 import { useAuth } from '@/contexts/AuthContext';
 
-const AuthPage = () => {
+interface AuthModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [showResetForm, setShowResetForm] = useState(false);
-  const { signIn, signUp, resetPassword, user } = useAuth();
-  const navigate = useNavigate();
-
-  // Redirect if already authenticated
-  useEffect(() => {
-    if (user) {
-      navigate('/');
-    }
-  }, [user, navigate]);
+  const { signIn, signUp, resetPassword } = useAuth();
 
   const [loginForm, setLoginForm] = useState({
     email: '',
@@ -49,7 +47,7 @@ const AuthPage = () => {
         toast.success("Login realizado com sucesso!", {
           description: "Bem-vindo de volta ao Nomade IA.",
         });
-        navigate('/');
+        onClose();
       }
     } catch (error) {
       toast.error("Erro inesperado", {
@@ -81,7 +79,7 @@ const AuthPage = () => {
         toast.success("Conta criada com sucesso!", {
           description: "Bem-vindo ao Nomade IA!",
         });
-        navigate('/');
+        onClose();
       }
     } catch (error) {
       toast.error("Erro inesperado", {
@@ -118,23 +116,18 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div className="text-center">
-          <Link to="/">
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle className="text-center">
             <img 
               src="/logo-nomade.png" 
               alt="Nomade IA" 
-              className="h-12 mx-auto"
+              className="h-8 mx-auto mb-4"
             />
-          </Link>
-          <h2 className="mt-6 text-3xl font-bold text-gray-900">
             Acesse sua conta
-          </h2>
-          <p className="mt-2 text-sm text-gray-600">
-            Entre ou crie sua conta para continuar
-          </p>
-        </div>
+          </DialogTitle>
+        </DialogHeader>
 
         <Tabs defaultValue="login" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
@@ -294,15 +287,9 @@ const AuthPage = () => {
             </Card>
           </TabsContent>
         </Tabs>
-
-        <div className="text-center">
-          <Link to="/" className="text-sm text-nomade-orange hover:underline">
-            ← Voltar para o início
-          </Link>
-        </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 
-export default AuthPage;
+export default AuthModal;

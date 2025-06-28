@@ -11,10 +11,12 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import SearchModal from './SearchModal';
+import AuthModal from './AuthModal';
 
 const Navbar = () => {
   const { user, signOut } = useAuth();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
 
   const handleSignOut = async () => {
     await signOut();
@@ -22,6 +24,10 @@ const Navbar = () => {
 
   const handleSearch = () => {
     setIsSearchOpen(true);
+  };
+
+  const handleAuthOpen = () => {
+    setIsAuthOpen(true);
   };
 
   // Get user display name from Supabase user metadata or email
@@ -96,11 +102,11 @@ const Navbar = () => {
               </DropdownMenu>
             ) : (
               <>
-                <Button variant="outline" size="sm" asChild>
-                  <Link to="/auth">Entrar</Link>
+                <Button variant="outline" size="sm" onClick={handleAuthOpen}>
+                  Entrar
                 </Button>
-                <Button size="sm" className="bg-nomade-orange hover:bg-nomade-orange/90" asChild>
-                  <Link to="/auth">Criar conta</Link>
+                <Button size="sm" className="bg-nomade-orange hover:bg-nomade-orange/90" onClick={handleAuthOpen}>
+                  Criar conta
                 </Button>
               </>
             )}
@@ -109,6 +115,7 @@ const Navbar = () => {
       </header>
 
       <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
     </>
   );
 };
