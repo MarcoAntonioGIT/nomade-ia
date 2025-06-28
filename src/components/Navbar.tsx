@@ -18,19 +18,6 @@ const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
 
-  const handleSignOut = async () => {
-    await signOut();
-  };
-
-  const handleSearch = () => {
-    setIsSearchOpen(true);
-  };
-
-  const handleAuthOpen = () => {
-    setIsAuthOpen(true);
-  };
-
-  // Get user display name from Supabase user metadata or email
   const getUserDisplayName = () => {
     if (!user) return '';
     return user.user_metadata?.full_name || user.email || 'User';
@@ -40,13 +27,14 @@ const Navbar = () => {
     <>
       <header className="py-4 border-b border-border">
         <div className="container flex justify-between items-center">
-          <Link to="/" className="flex items-center space-x-2">
+          <Link to="/" className="flex items-center">
             <img 
               src="/logo-nomade.png" 
               alt="Nomade IA" 
               className="h-10"
             />
           </Link>
+          
           <nav className="hidden md:flex gap-6 items-center">
             <Link to="/" className="text-muted-foreground hover:text-foreground transition-colors">
               Início
@@ -66,12 +54,12 @@ const Navbar = () => {
               Contato
             </Link>
           </nav>
+          
           <div className="flex gap-2 items-center">
-            {/* Search button */}
             <Button 
               variant="ghost" 
               size="sm" 
-              onClick={handleSearch}
+              onClick={() => setIsSearchOpen(true)}
               className="p-2"
             >
               <Search className="h-4 w-4" />
@@ -94,21 +82,20 @@ const Navbar = () => {
                       Minhas Viagens
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={handleSignOut} className="flex items-center gap-2">
+                  <DropdownMenuItem onClick={signOut} className="flex items-center gap-2">
                     <LogOut className="h-4 w-4" />
                     Sair
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <>
-                <Button variant="outline" size="sm" onClick={handleAuthOpen}>
-                  Entrar
-                </Button>
-                <Button size="sm" className="bg-nomade-orange hover:bg-nomade-orange/90" onClick={handleAuthOpen}>
-                  Criar conta
-                </Button>
-              </>
+              <Button 
+                size="sm" 
+                className="bg-nomade-orange hover:bg-nomade-orange/90" 
+                onClick={() => setIsAuthOpen(true)}
+              >
+                Entrar
+              </Button>
             )}
           </div>
         </div>
