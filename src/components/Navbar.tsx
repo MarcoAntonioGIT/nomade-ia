@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -38,11 +37,11 @@ const Navbar = () => {
     <>
       <header className="py-4 border-b border-border">
         <div className="container flex justify-between items-center">
-          <Link to="/" className="flex items-center">
+          <Link to="/" className="flex items-center space-x-2">
             <img 
               src="/logo-nomade.png" 
               alt="Nomade IA" 
-              className="h-10"
+              className="h-14"
             />
           </Link>
           
