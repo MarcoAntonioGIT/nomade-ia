@@ -1,4 +1,3 @@
-
 import React, { useRef, useState } from 'react';
 import { Send } from 'lucide-react';
 
@@ -23,7 +22,7 @@ const Chatbot: React.FC = () => {
     // Se é a primeira mensagem, inicialize com a mensagem de boas-vindas
     if (!isStarted) {
       setMessages([
-        { sender: 'bot', text: 'Olá! Sou a Layla, sua assistente de viagens. Como posso ajudar?' },
+        { sender: 'bot', text: 'Olá! Sou a NOMA, sua assistente de viagens. Como posso ajudar?' },
         { sender: 'user', text: userMsg }
       ]);
       setIsStarted(true);
