@@ -17,10 +17,21 @@ const Navbar = () => {
   const { user, signOut } = useAuth();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [defaultAuthTab, setDefaultAuthTab] = useState<'login' | 'signup'>('login');
 
   const getUserDisplayName = () => {
     if (!user) return '';
     return user.user_metadata?.full_name || user.email || 'User';
+  };
+
+  const handleLoginClick = () => {
+    setDefaultAuthTab('login');
+    setIsAuthOpen(true);
+  };
+
+  const handleSignupClick = () => {
+    setDefaultAuthTab('signup');
+    setIsAuthOpen(true);
   };
 
   return (
@@ -89,20 +100,33 @@ const Navbar = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Button 
-                size="sm" 
-                className="bg-nomade-orange hover:bg-nomade-orange/90" 
-                onClick={() => setIsAuthOpen(true)}
-              >
-                Entrar
-              </Button>
+              <div className="flex gap-2">
+                <Button 
+                  variant="outline"
+                  size="sm" 
+                  onClick={handleLoginClick}
+                >
+                  Entrar
+                </Button>
+                <Button 
+                  size="sm" 
+                  className="bg-nomade-orange hover:bg-nomade-orange/90" 
+                  onClick={handleSignupClick}
+                >
+                  Criar conta
+                </Button>
+              </div>
             )}
           </div>
         </div>
       </header>
 
       <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
-      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
+      <AuthModal 
+        isOpen={isAuthOpen} 
+        onClose={() => setIsAuthOpen(false)}
+        defaultTab={defaultAuthTab}
+      />
     </>
   );
 };

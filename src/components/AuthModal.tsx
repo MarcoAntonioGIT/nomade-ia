@@ -10,9 +10,10 @@ import PasswordResetForm from './auth/PasswordResetForm';
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
+  defaultTab?: 'login' | 'signup';
 }
 
-const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
+const AuthModal = ({ isOpen, onClose, defaultTab = 'login' }: AuthModalProps) => {
   const [showResetForm, setShowResetForm] = useState(false);
 
   return (
@@ -29,7 +30,7 @@ const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
           </DialogTitle>
         </DialogHeader>
 
-        <Tabs defaultValue="login" className="w-full">
+        <Tabs defaultValue={defaultTab} className="w-full">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="login">Entrar</TabsTrigger>
             <TabsTrigger value="signup">Criar conta</TabsTrigger>
