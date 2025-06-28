@@ -1,8 +1,9 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
-import { User, LogOut } from 'lucide-react';
+import { User, LogOut, Search } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,6 +16,18 @@ const Navbar = () => {
 
   const handleSignOut = async () => {
     await signOut();
+  };
+
+  const handleSearch = () => {
+    // Scroll to search section on home page or navigate to home
+    if (window.location.pathname === '/') {
+      const searchSection = document.querySelector('[data-search-section]');
+      if (searchSection) {
+        searchSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      window.location.href = '/';
+    }
   };
 
   // Get user display name from Supabase user metadata or email
@@ -52,7 +65,17 @@ const Navbar = () => {
             Contato
           </Link>
         </nav>
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
+          {/* Search button */}
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={handleSearch}
+            className="p-2"
+          >
+            <Search className="h-4 w-4" />
+          </Button>
+          
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
