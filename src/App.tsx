@@ -1,3 +1,4 @@
+
 import React, { Suspense } from 'react';
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -17,6 +18,7 @@ const ResultPage = React.lazy(() => import("./pages/ResultPage"));
 const MyTripsPage = React.lazy(() => import("./pages/MyTripsPage"));
 const AboutPage = React.lazy(() => import("./pages/AboutPage"));
 const ContactPage = React.lazy(() => import("./pages/ContactPage"));
+const OffersPage = React.lazy(() => import("./pages/OffersPage"));
 const NotFound = React.lazy(() => import("./pages/NotFound"));
 
 // Create a new QueryClient instance
@@ -60,6 +62,7 @@ const App: React.FC = () => {
                   <Route path="/reset-password" element={<ResetPasswordPage />} />
                   <Route path="/about" element={<AboutPage />} />
                   <Route path="/contact" element={<ContactPage />} />
+                  <Route path="/offers" element={<OffersPage />} />
                   
                   {/* Protected Routes */}
                   <Route path="/planner" element={
