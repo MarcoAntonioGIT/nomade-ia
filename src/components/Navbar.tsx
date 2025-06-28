@@ -10,24 +10,18 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import SearchModal from './SearchModal';
 
 const Navbar = () => {
   const { user, signOut } = useAuth();
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const handleSignOut = async () => {
     await signOut();
   };
 
   const handleSearch = () => {
-    // Scroll to search section on home page or navigate to home
-    if (window.location.pathname === '/') {
-      const searchSection = document.querySelector('[data-search-section]');
-      if (searchSection) {
-        searchSection.scrollIntoView({ behavior: 'smooth' });
-      }
-    } else {
-      window.location.href = '/';
-    }
+    setIsSearchOpen(true);
   };
 
   // Get user display name from Supabase user metadata or email
@@ -37,81 +31,85 @@ const Navbar = () => {
   };
 
   return (
-    <header className="py-4 border-b border-border">
-      <div className="container flex justify-between items-center">
-        <Link to="/" className="flex items-center space-x-2">
-          <img 
-            src="/logo-nomade.png" 
-            alt="Nomade IA" 
-            className="h-10"
-          />
-        </Link>
-        <nav className="hidden md:flex gap-6 items-center">
-          <Link to="/" className="text-muted-foreground hover:text-foreground transition-colors">
-            Início
+    <>
+      <header className="py-4 border-b border-border">
+        <div className="container flex justify-between items-center">
+          <Link to="/" className="flex items-center space-x-2">
+            <img 
+              src="/logo-nomade.png" 
+              alt="Nomade IA" 
+              className="h-10"
+            />
           </Link>
-          {user && (
-            <Link to="/my-trips" className="text-muted-foreground hover:text-foreground transition-colors">
-              Minhas Viagens
+          <nav className="hidden md:flex gap-6 items-center">
+            <Link to="/" className="text-muted-foreground hover:text-foreground transition-colors">
+              Início
             </Link>
-          )}
-          <Link to="/offers" className="text-muted-foreground hover:text-foreground transition-colors">
-            Ofertas
-          </Link>
-          <Link to="/about" className="text-muted-foreground hover:text-foreground transition-colors">
-            Sobre nós
-          </Link>
-          <Link to="/contact" className="text-muted-foreground hover:text-foreground transition-colors">
-            Contato
-          </Link>
-        </nav>
-        <div className="flex gap-2 items-center">
-          {/* Search button */}
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={handleSearch}
-            className="p-2"
-          >
-            <Search className="h-4 w-4" />
-          </Button>
-          
-          {user ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="flex items-center gap-2">
-                  <User className="h-4 w-4" />
-                  <span className="hidden md:inline">
-                    {getUserDisplayName()}
-                  </span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem asChild>
-                  <Link to="/my-trips" className="flex items-center gap-2">
+            {user && (
+              <Link to="/my-trips" className="text-muted-foreground hover:text-foreground transition-colors">
+                Minhas Viagens
+              </Link>
+            )}
+            <Link to="/offers" className="text-muted-foreground hover:text-foreground transition-colors">
+              Ofertas
+            </Link>
+            <Link to="/about" className="text-muted-foreground hover:text-foreground transition-colors">
+              Sobre nós
+            </Link>
+            <Link to="/contact" className="text-muted-foreground hover:text-foreground transition-colors">
+              Contato
+            </Link>
+          </nav>
+          <div className="flex gap-2 items-center">
+            {/* Search button */}
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={handleSearch}
+              className="p-2"
+            >
+              <Search className="h-4 w-4" />
+            </Button>
+            
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="flex items-center gap-2">
                     <User className="h-4 w-4" />
-                    Minhas Viagens
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleSignOut} className="flex items-center gap-2">
-                  <LogOut className="h-4 w-4" />
-                  Sair
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <>
-              <Button variant="outline" size="sm" asChild>
-                <Link to="/auth">Entrar</Link>
-              </Button>
-              <Button size="sm" className="bg-nomade-orange hover:bg-nomade-orange/90" asChild>
-                <Link to="/auth">Criar conta</Link>
-              </Button>
-            </>
-          )}
+                    <span className="hidden md:inline">
+                      {getUserDisplayName()}
+                    </span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem asChild>
+                    <Link to="/my-trips" className="flex items-center gap-2">
+                      <User className="h-4 w-4" />
+                      Minhas Viagens
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleSignOut} className="flex items-center gap-2">
+                    <LogOut className="h-4 w-4" />
+                    Sair
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <>
+                <Button variant="outline" size="sm" asChild>
+                  <Link to="/auth">Entrar</Link>
+                </Button>
+                <Button size="sm" className="bg-nomade-orange hover:bg-nomade-orange/90" asChild>
+                  <Link to="/auth">Criar conta</Link>
+                </Button>
+              </>
+            )}
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+
+      <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+    </>
   );
 };
 
